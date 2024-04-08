@@ -1,23 +1,23 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../router/index";
-import NotFound from "../router/index"
-import About from "../views/AboutPage.vue"
+import HomePage from "../views/HomePage.vue";
+import NotFound from "../views/404Page.vue";
+import AboutPage from "../views/AboutPage.vue"; 
+import AddCategory from "../views/Category/addCategory.vue";
 const routes = [
   {
     path: "/",
     name: "Home",
-    meta: {
-        layout: "default",
-    },
-    component: Home,
+    component: HomePage
   },
   {
     path: "/about",
     name: "About",
-    meta: {
-        layout: "auth",
-    },
-    component: About,
+    component: AboutPage,
+  },
+  {
+    path: "/admin/category/add",
+    name: "AddCategory",
+    component: AddCategory,
   },
   {
     path: "/:pathMatch(.*)*",

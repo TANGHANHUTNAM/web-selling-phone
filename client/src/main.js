@@ -6,15 +6,11 @@ import "./assets/styles/reset.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-icons/font/bootstrap-icons.css"
 import "./assets/styles/index.css"
+import "bootstrap/dist/js/bootstrap.min.js"
 // import router
 import router from "./router/index"
 
-import {registerGlobalComponent} from "./utils/import"
-
 const app = createApp(App);
-
-registerGlobalComponent(app);
-
 app.use(router);
 // app.use(store);
 app.mount('#app')

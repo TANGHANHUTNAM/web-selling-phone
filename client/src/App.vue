@@ -1,19 +1,14 @@
 <template>
-  <component :is="layout">
-    <router-view></router-view>
-  </component>
+  <nav-bar></nav-bar>
+  <router-view></router-view>
 </template>
 
 <script>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { PUBLIC_LAYOUT } from "@/constants/index";
+import navBar from "./components/NavBar.vue";
 export default {
-  setup() {
-    const route = useRoute();
-    return {
-      layout: computed(() => (route.meta.layout || PUBLIC_LAYOUT) + "-layout"),
-    };
+  name: "App",
+  components: {
+    "nav-bar": navBar,
   },
 };
 </script>

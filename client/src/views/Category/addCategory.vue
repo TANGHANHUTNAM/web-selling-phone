@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="container">
     <div class="row">
       <div class="text-center">
@@ -63,14 +63,19 @@ export default {
         description: description.value,
         imageURL: imageURL.value,
       };
-      const baseURL =
+      const baseURL = "123";
     }
     return {
       categoryName,
       description,
       imageURL,
       addCategory,
+      newCategory,
     };
   },
 };
-</script>
+</script> -->
+
+<template>
+  <div>123</div>
+</template>

@@ -1,11 +1,66 @@
 <template>
-  <div class="nav">
-    <router-link :to="{ name: 'Home' }">Home</router-link>
-    <router-link :to="{ name: 'About' }">About</router-link>
-    <router-link :to="{ name: 'AddCategory' }">AddCategory</router-link>
+  <div class="navbar container-fluid">
+    <div class="nav-logo">
+      <img src="../assets/images/logo.png" alt="" />
+      <p>SmartPhoneVN</p>
+    </div>
+    <ul class="nav-menu">
+      <li
+        v-for="navlink in navlinks"
+        :key="navlink.id"
+        @Click="onClick(navlink.id)"
+      >
+        <router-link class="nav-router-link" :to="{ name: navlink.name }">{{
+          navlink.text
+        }}</router-link>
+        <!-- <hr /> -->
+      </li>
+    </ul>
+    <div class="nav-login-cart">
+      <router-link :to="{ name: 'LoginSignUp' }">
+        <button class="nav-login">Login</button>
+      </router-link>
+      <router-link class="nav-router-link" :to="{ name: 'Cart' }">
+        <div class="nav-cart">
+          <div><i class="bi bi-cart"></i></div>
+          <div class="nav-cart-count">0</div>
+        </div>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { reactive } from "vue";
+export default {
+  setup() {
+    const navlinks = reactive([
+      {
+        id: 1,
+        text: "Home",
+        name: "Home",
+        isClick: false,
+      },
+      {
+        id: 2,
+        text: "About",
+        name: "About",
+        isClick: false,
+      },
+      {
+        id: 3,
+        text: "All Products",
+        name: "AllProducts",
+        isClick: false,
+      },
+    ]);
+    function onClick(id) {
+      console.log(id);
+    }
+    return {
+      navlinks,
+      onClick,
+    };
+  },
+};
 </script>

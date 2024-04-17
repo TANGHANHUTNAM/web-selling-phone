@@ -1,7 +1,9 @@
 <template>
-  <nav-bar></nav-bar>
-  <router-view></router-view>
-  <footer-component></footer-component>
+  <div>
+    <nav-bar></nav-bar>
+    <router-view></router-view>
+    <footer-component></footer-component>
+  </div>
 </template>
 
 <script>

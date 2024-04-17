@@ -63,7 +63,6 @@ export default {
         description: description.value,
         imageURL: imageURL.value,
       };
-      const baseURL = "123";
     }
     return {
       categoryName,
@@ -77,5 +76,5 @@ export default {
 </script> -->
 
 <template>
-  <div>123</div>
+  <div>1</div>
 </template>

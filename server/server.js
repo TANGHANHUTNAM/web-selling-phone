@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 require("./services/DB");
+const multer = require("multer")
+const cors = require("cors")
 
 const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME;
@@ -11,6 +13,7 @@ const hostname = process.env.HOST_NAME;
 const configViewEngine = require("./config/viewEngine");
 configViewEngine(app);
 app.use(express.json())
+app.use(cors)
 
 
 const webRoutes = require("./routes/web");

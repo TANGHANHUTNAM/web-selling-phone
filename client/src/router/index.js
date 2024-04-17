@@ -7,7 +7,7 @@ import AllProducts from "../views/AllProducts.vue"
 import LoginSignUp from "../views/LoginSignup.vue"
 import Register from "../components/loginsignup/SignUp.vue"
 import Cart from "../views/Cart.vue"
-import ProductDetail from "../components/allproduct/ProductDetails.vue"
+import ProductDetails from "../components/product/ProductDetails.vue"
 const routes = [
   {
     path: "/",
@@ -27,7 +27,7 @@ const routes = [
   {
     path: "/allproducts/:id",
     name: "ProductsDetails",
-    component: ProductDetail,
+    component: ProductDetails,
   },
   {
     path: "/loginsignup",

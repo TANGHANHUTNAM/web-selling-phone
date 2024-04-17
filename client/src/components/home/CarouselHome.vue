@@ -1,5 +1,5 @@
 <template>
-  <section class="pt-3">
+  <section class="pt-3 home-carouse">
     <div class="container">
       <div class="row gx-3">
         <main class="col-lg-9">
@@ -31,21 +31,21 @@
                 <div class="carousel-item active">
                   <img
                     src="../../assets/images/carousel/3.jpg"
-                    class="d-block w-100 rounded-5"
+                    class="d-block w-100 rounded-4"
                     alt="..."
                   />
                 </div>
                 <div class="carousel-item">
                   <img
                     src="../../assets/images/carousel/2.jpg"
-                    class="d-block w-100 rounded-5"
+                    class="d-block w-100 rounded-4"
                     alt="..."
                   />
                 </div>
                 <div class="carousel-item">
                   <img
                     src="../../assets/images/carousel/1.jpg"
-                    class="d-block w-100 rounded-5"
+                    class="d-block w-100 rounded-4"
                     alt="..."
                   />
                 </div>
@@ -79,7 +79,7 @@
         </main>
         <aside class="col-lg-3">
           <div
-            class="card-banner h-100 rounded-5 w-100"
+            class="card-banner h-100 rounded-4 w-100"
             style="background-color: var(--primary-blue)"
           >
             <!-- <div class="card-body text-center pb-5">

@@ -18,7 +18,7 @@
     </ul>
     <div class="nav-login-cart">
       <router-link :to="{ name: 'LoginSignUp' }">
-        <button class="nav-login">Login</button>
+        <button class="nav-login">Đăng nhập</button>
       </router-link>
       <router-link class="nav-router-link" :to="{ name: 'Cart' }">
         <div class="nav-cart">
@@ -37,19 +37,19 @@ export default {
     const navlinks = reactive([
       {
         id: 1,
-        text: "Home",
+        text: "Trang chủ",
         name: "Home",
         isClick: false,
       },
       {
         id: 2,
-        text: "About",
+        text: "Giới thiệu",
         name: "About",
         isClick: false,
       },
       {
         id: 3,
-        text: "All Products",
+        text: "Sản phẩm",
         name: "AllProducts",
         isClick: false,
       },

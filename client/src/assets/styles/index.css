@@ -130,7 +130,6 @@
     background: var(--primary-blue);
     color: var(--primary-white);
     cursor: pointer;
-
 }
 
 /* HomeBanner */
@@ -146,5 +145,11 @@
     }
     .signin {
         width: 50%;
+    }
+    .home-carousel {
+        width: 100%;
+    }
+    .carousel-img img {
+        border-radius: 0;
     }
 }

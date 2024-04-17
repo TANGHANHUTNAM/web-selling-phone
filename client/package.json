@@ -38,7 +38,9 @@
       "requireConfigFile": false
     },
     "rules": {
-      "vue/multi-word-component-names": "off"
+      "vue/multi-word-component-names": "off",
+      "vue/no-multiple-template-root": "off",
+      "vue/valid-template-root": "off"
     }
   },
   "browserslist": [

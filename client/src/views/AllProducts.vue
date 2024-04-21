@@ -13,28 +13,22 @@
         </div>
       </div>
     </header>
-
-    <div class="" id="page-wrap">
-      <div class="grid-wrap">
-        <div class="product-item" v-for="product in products" :key="product.id">
-          <img :src="product.imgURL" alt="" />
-          <h3 class="product-name">{{ product.name }}</h3>
-          <p class="product-price">{{ product.price_new }}</p>
-          <p class="product-price">{{ product.price_old }}</p>
-          <router-link
-            :to="{ name: 'ProductsDetails', params: { id: product.id } }"
-            ><button>View</button></router-link
-          >
-        </div>
-      </div>
+    <!-- ProductGrid -->
+    <div>
+      <ProductGrid :products="products" />
     </div>
+    <!-- ProductGrid -->
   </div>
 </template>
 
 <script>
+import ProductGrid from "../components/product/ProductGrid.vue";
 import { products } from "../assets/js/fake-data.js";
 // import { reactive } from "vue";
 export default {
+  components: {
+    ProductGrid,
+  },
   setup() {
     return {
       products,
@@ -42,3 +36,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.product-item-price-new {
+  font-size: 1.2rem;
+  margin: 0;
+  color: var(--primary-red);
+}
+.product-item-price-old {
+  font-size: 0.9rem;
+  margin: 0;
+  text-decoration-line: line-through;
+  color: var(--primary-red);
+}
+
+.product-item-card {
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.product-item-rating {
+  color: var(--primary-yellow);
+}
+</style>

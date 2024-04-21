@@ -1,0 +1,64 @@
+<template>
+  <div class="m-4" v-if="product">
+    <div class="row gy-3 mb-4">
+      <div class="col-lg-5">
+        <div class="me-lg-5">
+          <div class="d-flex">
+            <img
+              :src="product.imgURL"
+              class="border rounded me-3"
+              style="width: 96px; height: 96px"
+              alt="..."
+            />
+            <div class="">
+              <a href="#" class="nav-link">{{ product.name }}</a>
+              <p class="text-muted">{{ product.des }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap"
+      >
+        <div class="">
+          <select style="width: 100px" class="form-select me-4">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+        </div>
+        <div class="">
+          <text class="h6">{{ product.price_new }}</text> <br />
+          <small class="text-muted text-nowrap">
+            {{ product.price_new }} / sản phẩm
+          </small>
+        </div>
+      </div>
+      <div
+        class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2"
+      >
+        <div class="float-md-end">
+          <!-- <a
+                        href="#!"
+                        class="btn btn-light border px-2 icon-hover-primary"
+                        ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
+                      ></a> -->
+          <a
+            href="#"
+            class="btn btn-light border text-danger icon-hover-danger"
+          >
+            Xóa</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "ProductListItem",
+  props: ["product"]
+};
+</script>

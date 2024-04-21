@@ -1,3 +1,3 @@
 <template>
-  <div>This</div>
+  <div>This is about PAGE</div>
 </template>

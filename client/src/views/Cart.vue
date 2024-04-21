@@ -24,64 +24,9 @@
           <!-- cart -->
           <div class="col-lg-9">
             <div class="card border shadow-0">
-              <div class="m-4">
-                <h4 class="card-title mb-4">Giỏ hàng</h4>
-                <div class="row gy-3 mb-4">
-                  <div class="col-lg-5">
-                    <div class="me-lg-5">
-                      <div class="d-flex">
-                        <img
-                          src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
-                          class="border rounded me-3"
-                          style="width: 96px; height: 96px"
-                        />
-                        <div class="">
-                          <a href="#" class="nav-link"
-                            >Winter jacket for men and lady</a
-                          >
-                          <p class="text-muted">Yellow, Jeans</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap"
-                  >
-                    <div class="">
-                      <select style="width: 100px" class="form-select me-4">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                      </select>
-                    </div>
-                    <div class="">
-                      <text class="h6">$1156.00</text> <br />
-                      <small class="text-muted text-nowrap">
-                        $460.00 / per item
-                      </small>
-                    </div>
-                  </div>
-                  <div
-                    class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2"
-                  >
-                    <div class="float-md-end">
-                      <a
-                        href="#!"
-                        class="btn btn-light border px-2 icon-hover-primary"
-                        ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-                      ></a>
-                      <a
-                        href="#"
-                        class="btn btn-light border text-danger icon-hover-danger"
-                      >
-                        Xóa</a
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              <h4 class="card-title m-4">Giỏ hàng</h4>
+              <!-- Product List -->
+              <ProductList :products="cartItems" />
               <div class="border-top pt-4 mx-4 mb-4">
                 <p>
                   <i class="fas fa-truck text-muted fa-lg"></i> Cửa hàng của
@@ -116,20 +61,20 @@
               <div class="card-body">
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">Tổng:</p>
-                  <p class="mb-2">$329.00</p>
+                  <p class="mb-2">{{ totalPrice }}đ</p>
                 </div>
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">Giảm giá:</p>
-                  <p class="mb-2 text-success">-$60.00</p>
+                  <p class="mb-2 text-success">0</p>
                 </div>
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">Thuế:</p>
-                  <p class="mb-2">$14.00</p>
+                  <p class="mb-2">0</p>
                 </div>
                 <hr />
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">Tổng cộng thanh toán:</p>
-                  <p class="mb-2 fw-bold">$283.00</p>
+                  <p class="mb-2 fw-bold">{{ totalPrice }}đ</p>
                 </div>
 
                 <div class="mt-3">
@@ -290,14 +235,17 @@
 </template>
 
 <script>
+import ProductList from "../components/cart/ProductList.vue";
 import { cartItems } from "../assets/js/fake-data";
 import { computed } from "vue";
 export default {
+  components: {
+    ProductList,
+  },
   setup() {
-    const totalPrice = computed(() => {
+    let totalPrice = computed(() => {
       return cartItems.reduce((sum, item) => sum + Number(item.price_new), 0);
     });
-    console.log(totalPrice.value);
     return {
       cartItems,
       totalPrice,

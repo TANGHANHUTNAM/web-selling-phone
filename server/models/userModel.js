@@ -11,6 +11,10 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    address: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -36,11 +40,10 @@ const userSchema = new Schema(
 const UserModel = mongoose.model("User", userSchema);
 module.exports = UserModel;
 
-// for(let i = 2; i < 20; i++){
-//   UserModel.create({
-//     fullName: `Nam ${i}`,
-//     phoneNumber: `0000000${i}`,
-//     email: `nam${i}@gmail.com`,
-//     password: `123456${i}`
-//   })
-// }
+// UserModel.create({
+//     fullName: "Nhựt Nam",
+//     phoneNumber: "0363655371",
+//     address: "An Giang",
+//     password: "123456",
+//     email: "admin@gmail.com",
+// })

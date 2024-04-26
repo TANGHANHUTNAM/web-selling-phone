@@ -1,29 +1,12 @@
 <template>
   <div>
-    <header>
-      <!-- Heading -->
-      <div style="background-color: var(--second-blue)">
-        <div class="container py-4">
-          <!-- Breadcrumb -->
-          <nav class="d-flex">
-            <h6 class="mb-0">
-              <a href="" class="text-white-50">Home</a>
-              <span class="text-white-50 mx-2"> > </span>
-              <a href="" class="text-white"><u>Register</u></a>
-            </h6>
-          </nav>
-          <!-- Breadcrumb -->
-        </div>
-      </div>
-      <!-- Heading -->
-    </header>
     <div class="container text-center my-4">
       <h2>ĐĂNG KÝ</h2>
     </div>
     <div class="container-md mt-2 mx-auto px-2 signup">
       <!-- Start: Form -->
       <form
-        class="flex-column justify-content-start my-3 mx-auto"
+        class="flex-column justify-content-start mx-auto"
         action=""
         @submit.prevent="onSubmit"
       >
@@ -54,6 +37,20 @@
             :class="{ 'is-invalid': error.phoneNumber }"
           />
           <small class="invalid-feedback">{{ error.phoneNumber }}</small>
+        </div>
+        <div class="form-group mb-3">
+          <label class="" for="address">Địa chỉ</label>
+          <input
+            type="text"
+            class="form-control rounded-2 mt-2"
+            id="address"
+            aria-describedby=""
+            placeholder="123 Đường ABC, Quận 1, TP.HCM"
+            v-model="user.address"
+            @blur="validate()"
+            :class="{ 'is-invalid': error.address }"
+          />
+          <small class="invalid-feedback">{{ error.address }}</small>
         </div>
         <div class="form-group mb-3">
           <label for="email">Địa chỉ Email</label>
@@ -109,6 +106,7 @@ export default {
       fullName: "",
       email: "",
       phoneNumber: "",
+      address: "",
       password: "",
     });
 
@@ -116,6 +114,7 @@ export default {
       fullName: "",
       email: "",
       phoneNumber: "",
+      address: "",
       password: "",
     });
 
@@ -124,6 +123,7 @@ export default {
       error.fullName = "";
       error.email = "";
       error.phoneNumber = "";
+      error.address = "";
       error.password = "";
       if (!user.fullName) {
         error.fullName = "Họ và tên không được để trống!";
@@ -145,6 +145,10 @@ export default {
         isValid = false;
       } else if (!isValidEmail(user.email)) {
         error.email = "Email không đúng định dạng!";
+      }
+      if (!user.address) {
+        error.address = "Địa chỉ không được để trống!";
+        isValid = false;
       }
       if (!user.password) {
         error.password = "Mật khẩu không được để trống!";

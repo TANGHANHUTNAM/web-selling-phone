@@ -1,7 +1,7 @@
 <template>
   <div class="container py-4">
     <h1>IPHONE</h1>
-    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 w-100 row-cols-1">
+    <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 w-100 row-cols-2">
       <ProductGridItem
         v-for="product in products"
         :key="product.id"

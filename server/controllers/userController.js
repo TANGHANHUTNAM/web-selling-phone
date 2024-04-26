@@ -13,19 +13,36 @@ const UserModel = require("../models/userModel.js")
  }
 
 // GET ALL USERS
+const PAGE_SIZE = 10
 const getAllUsers = async (req, res) => {
-    UserModel.find({}).then(data => {
-        res.status(200).json(data)
-    }).catch(error => {
-        res.status(500).json(error)
-    })
+    var page = req.query.page;
+    if(page){
+        page = parseInt(page);
+        if(page <= 0) page = 1;
+        var elementsPass = (page -1)*PAGE_SIZE; // 10 phan tu tren 1 trang
+
+        await UserModel.find({}).skip(elementsPass).limit(PAGE_SIZE)
+        .then(data => {
+            res.json(data)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
+    } else {
+        await UserModel.find({}).then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
+            res.status(500).json(error)
+        })
+    }
+    
 }
 
 // UPDATE USER
 const updateUser = async (req, res) => {
     const id = req.params.id;
-    const {fullName, phoneNumber, email, password} = req.body;
-    await UserModel.findByIdAndUpdate(id, {fullName: fullName, phoneNumber: phoneNumber, email: email, password: password})
+    const {fullName, phoneNumber, address ,email, password} = req.body;
+    await UserModel.findByIdAndUpdate(id, {fullName: fullName, phoneNumber: phoneNumber, address: address ,email: email, password: password})
     .then(data => {
         res.status(200).json({message: "Cập nhật thành công!", data})
     })
@@ -49,6 +66,7 @@ const deleteUser = async (req, res) => {
 const registerUser = async (req, res) => {
     var fullName = req.body.fullName;
     var phoneNumber = req.body.phoneNumber;
+    var address = req.body.address;
     var email = req.body.email;
     var password = req.body.password;
     await UserModel.findOne({email: email}).then(data => {
@@ -58,6 +76,7 @@ const registerUser = async (req, res) => {
             return UserModel.create({
             fullName: fullName,
             phoneNumber: phoneNumber,
+            address: address,
             email: email,
             password: password,
             isAdmin: false

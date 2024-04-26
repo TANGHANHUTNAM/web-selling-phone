@@ -10,10 +10,16 @@ const couponSchema = new Schema({
     code: {
         type: String,
         required: true,
+        unique: true
     },
     discount: {
         type: Number,
         required: true,
+    },
+    status: {
+        type: Number,
+        required: true,
+        default: 1
     },
 },
 {

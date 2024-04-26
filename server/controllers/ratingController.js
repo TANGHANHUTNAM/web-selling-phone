@@ -9,7 +9,7 @@ const addRating = async (req, res) => {
     const number_star = req.body.number_star;
     const user = await UserModel.findById(userID);
     if(user){
-        const product = await RatingModel.create({
+        await RatingModel.create({
         productID: productID,
         userID: userID,
         number_star: number_star
@@ -27,7 +27,7 @@ const PAGE_SIZE = 10
 const getRatedProduct = async (req, res) => {
     const page = req.query.page;
     const productID = req.params.productID;
-    const product = ProductModel.findById(productID);
+    const ratedProduct = ProductModel.findById(productID);
     if(page){
         page = parseInt(page);
         if(page <= 0) page = 1;
@@ -41,7 +41,11 @@ const getRatedProduct = async (req, res) => {
             res.status(500).json(error)
         })
     } else {
-        await RatingModel.find({productID: productID})
+        if(ratedProduct){
+            res.status(200).json(ratedProduct)
+        } else {
+            res.status(404).json("Không tìm thấy productID")
+        }
     }
 }
 

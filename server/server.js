@@ -23,6 +23,12 @@ const feedbackRoutes = require("./routes/feedbackRoutes");
 app.use("/api/feedback", feedbackRoutes);
 const ratingRoutes = require("./routes/ratingRoutes");
 app.use("/api/rating", ratingRoutes);
+const couponRoutes = require("./routes/couponRoutes");
+app.use("/api/coupon", couponRoutes);
+const paymentRoutes = require("./routes/paymentRoutes");
+app.use("/api/payment", paymentRoutes);
+const orderRoutes = require("./routes/orderRoutes");
+app.use("/api/order", orderRoutes);
 
 
 app.listen(port, hostname, () => {

@@ -15,7 +15,7 @@ const shoppingcartitemSchema = new Schema({
         default: 1,
     },
     price: {
-        type: Number,
+        type: String,
         required: true,
     },
 },

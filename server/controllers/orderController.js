@@ -27,6 +27,8 @@ const addOrder = async (req, res) => {
 // GET ORDER APPROVED 
 const getOrderApproved = async (req, res) => {
     const orders = await OrderModel.find({order_status: 1})
+    .populate("userID")
+    console.log(orders)
     if(orders.length > 0){
         res.status(200).json(orders)
     } else {
@@ -37,6 +39,7 @@ const getOrderApproved = async (req, res) => {
 // GET ORDER PENDING
 const getOrderPending= async (req, res) => {
     const orders = await OrderModel.find({order_status: 0})
+    .populate("userID")
     if(orders.length > 0){
         res.status(200).json(orders)
     } else {
@@ -48,6 +51,7 @@ const getOrderPending= async (req, res) => {
 const getOrderApprovedByUserID = async (req, res) => {
     const userID = req.params.userID;
     const orders = await OrderModel.find({userID: userID, order_status: 1})
+    .populate("userID")
     if(orders.length > 0){
         res.status(200).json(orders)
     } else {
@@ -59,6 +63,7 @@ const getOrderApprovedByUserID = async (req, res) => {
 const getOrderPendingByUserID = async (req, res) => {
     const userID = req.params.userID;
     const orders = await OrderModel.find({userID: userID, order_status: 0})
+    .populate("userID")
     if(orders.length > 0){
         res.status(200).json(orders)
     } else {

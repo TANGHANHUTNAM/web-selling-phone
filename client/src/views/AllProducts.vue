@@ -1,18 +1,16 @@
 <template>
   <div>
     <!-- ProductGrid -->
-    <div>
+    <div class="container">
+      <h1 class="my-4 text-uppercase">Tất cả sản phẩm</h1>
       <ProductGrid :products="products" />
     </div>
     <!-- ProductGrid -->
-    <div class="container d-flex justify-content-end">
+    <div class="container d-flex justify-content-end mt-4">
       <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        <ul class="pagination d-flex">
+          <li class="page-item"><a class="page-link" href="#" @click="prePage()">Trở lại</a></li>
+          <li class="page-item"><a class="page-link" href="#" @click="nextPage()">Tiếp theo</a></li>
         </ul>
       </nav>
     </div>
@@ -20,16 +18,39 @@
 </template>
 
 <script>
+import axios from "axios";
+import { ref } from "vue"
 import ProductGrid from "../components/product/ProductGrid.vue";
-import { products } from "../assets/js/fake-data.js";
-// import { reactive } from "vue";
+
 export default {
   components: {
     ProductGrid,
   },
   setup() {
+    const products = ref(null);
+    const currentPage = ref(1);
+    const getProducts = async () => {
+        const response = await axios.get(`http://localhost:8081/api/products?page=${currentPage.value}`);
+        products.value = response.data;
+        console.log(response.data)
+    };
+    function nextPage() {
+      currentPage.value++;
+      getProducts();
+    }
+    function prePage() {
+      if (currentPage.value > 1) {
+        currentPage.value--;
+        getProducts();
+      }
+    }
+    function onLoadPage(page){
+      currentPage.value = page;
+      getProducts();
+    }
+    getProducts();  
     return {
-      products,
+      products, nextPage, prePage, onLoadPage
     };
   },
 };
@@ -55,5 +76,11 @@ export default {
 
 .product-item-rating {
   color: var(--primary-yellow);
+}
+
+.page-item{
+  cursor: pointer;
+  width: 100px;
+  text-align: center;
 }
 </style>

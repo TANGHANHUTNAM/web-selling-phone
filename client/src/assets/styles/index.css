@@ -27,6 +27,10 @@
     color: var(--primary-blue);
 }
 
+.name-storephone {
+    color: var(--primary-blue);
+}
+
 .nav-logo {
     display: flex;
     align-items: center;

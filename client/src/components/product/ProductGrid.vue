@@ -1,10 +1,9 @@
 <template>
-  <div class="container py-4">
-    <h1>IPHONE</h1>
+  <div class="container">
     <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 w-100 row-cols-2">
       <ProductGridItem
         v-for="product in products"
-        :key="product.id"
+        :key="product._id"
         :product="product"
       />
     </div>
@@ -16,10 +15,7 @@ import ProductGridItem from "./ProductGridItem.vue";
 export default {
   name: "ProductGrid",
   props: {
-    products: {
-      type: Object,
-      default: () => ({}),
-    }
+    products: [Array, Object]
   },
   components: {
     ProductGridItem,

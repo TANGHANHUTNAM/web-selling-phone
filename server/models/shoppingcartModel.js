@@ -2,14 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const shoppingcartSchema = new Schema({
-    cartID: {
+    userID: {
         type: String,
         unique: true,
         ref: "User"
-    },
-    total :{
-        type: Number,
-        required: true,
     },
 },
 {

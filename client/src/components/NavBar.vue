@@ -1,10 +1,12 @@
 <template>
   <div>
     <div class="navbar container-fluid">
-    <div class="nav-logo">
+    <router-link class="text-decoration-none" :to="{ name: 'Home' }" @click.prevent="resetClick()">
+      <div class="nav-logo">
       <img src="../assets/images/logo.png" alt="" />
-      <p>SmartPhoneVN</p>
+      <p class="name-storephone">SmartPhoneVN</p>
     </div>
+    </router-link>
     <ul class="nav-menu">
       <li
         v-for="navlink in navlinks"

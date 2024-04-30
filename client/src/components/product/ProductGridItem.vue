@@ -5,7 +5,7 @@
         class="text-decoration-none text-dark d-flex flex-column h-100"
         :to="{ name: 'ProductsDetails', params: { id: product._id } }"
       >
-        <img :src="`http://localhost:8081/${product.thumbnail[0].thumbnail_link}`" class="card-img-top" alt="" />
+        <img v-if="thumbnails.length > 0" :src="`http://localhost:8081${thumbnails[0].thumbnail_link}`" class="card-img-top" alt="" />
         <div class="card-body p-1 d-flex flex-column justify-content-around">
           <h6 class="card-title d-flex justify-content-center align-items-center product-item-card-name text-center">{{ product.title }}</h6>
           <p class="card-text w-100 m-0 product-item-card-des h-50">
@@ -20,22 +20,32 @@
             <i class="bi bi-star-fill product-item-rating"></i>
           </p>
         </div>
+      <div class="btn btn-primary mb-1 btn-add-cart">Xem chi tiết</div>
       </router-link>
-      <div class="btn btn-primary mb-1 btn-add-cart">Thêm vào giỏ hàng</div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import {ref, onMounted} from "vue"
 export default {
   name: "ProductGridItem",
   props: {
     product: [
-      Array,
-      Object
-    ]
+      Object, Array
+    ],
   },
-  setup() {
+  setup(props) {
+    const items = ref(props.product)
+    const thumbnails = ref([])
+    const getThumbnail = async () => {
+      const response = await axios.get(`http://localhost:8081/api/products/${items.value._id}/thumbnail`);
+      thumbnails.value = response.data;
+    }
+    onMounted(() => {
+      getThumbnail()
+    })
     function formatPrice(value) {
       if (!value) {
         return '';
@@ -43,7 +53,7 @@ export default {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
     return {
-      formatPrice
+      formatPrice, thumbnails
     }
   }
 }

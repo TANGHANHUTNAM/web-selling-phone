@@ -14,7 +14,7 @@
               >
                 <img
                   class="rounded-4 fit p-3 product-img-main"
-                  :src="`http://localhost:8081/${thumbnail[0].thumbnail_link}`"
+                  :src="`http://localhost:8081${thumbnail[0].thumbnail_link}`"
                 />
               </div>
             </div>
@@ -31,7 +31,7 @@
                   width="60"
                   height="60"
                   class="rounded-2"
-                  :src="`http://localhost:8081/${thumb.thumbnail_link}`"
+                  :src="`http://localhost:8081${thumb.thumbnail_link}`"
                 />
               </div>
         
@@ -53,16 +53,16 @@
                   ><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 đã
                   bán</span
                 >
-                <span v-if="status" class="text-success ms-2">Còn hàng</span>
-                <span v-else class="text-danger ms-2">Hết hàng</span>
+                <span v-if="status" class="text-success ms-2 ">Còn hàng</span>
+                <span v-else-if="!status" class="text-danger ms-2">Hết hàng</span>
               </div>
 
               <div class="mb-3">
-                <span class="h5 product-new-price">{{ new_price }}đ</span>
+                <span class="h5 product-new-price">{{ formatPrice(new_price) }}đ</span>
                 <span class="text-muted">/sản phẩm</span>
                 <p>
                   <span class="product-details-old-price">
-                    {{ old_price }}đ</span
+                    {{formatPrice(old_price)}}đ</span
                   >
                 </p>
               </div>
@@ -85,9 +85,10 @@
                   <label class="mb-2">Color</label>
                   <select
                     class="form-select border border-secondary"
-                    style="height: 35px"
+                    style="height: 40px" 
+                    v-model="select"
                   >
-                    <option v-for="thumb in thumbnail" :key="thumb._id">{{ thumb.color }}</option>
+                    <option :value="thumb.color"  @click="onClick(thumb.color)" v-for="thumb in thumbnail" :key="thumb._id">{{ thumb.color }}</option>
                   </select>
                 </div>
                 <!-- col.// -->
@@ -98,18 +99,18 @@
               </div>
               <div class="row">
                 <div class="col-12 d-flex flex-row">
-                  <a
+                  <!-- <div
                     href="#"
                     class="btn btn-warning shadow-0 w-100 me-1 d-flex text-white align-items-center justify-content-center"
                   >
                     Mua ngay
-                  </a>
-                  <a
-                    href="#"
-                    class="btn btn-primary shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center"
+                  </div> -->
+                  <div
+                    @click="addToCart()"
+                    class="btn btn-warning shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
                   >
                     <i class="me-1 fa fa-shopping-basket"></i> Thêm vào giỏ hàng
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -126,7 +127,7 @@
 import NotFound from "../../views/404Page.vue";
 import axios from "axios"
 import { useRoute } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed} from "vue";
 export default {
   components: {
     "not-found": NotFound,
@@ -136,21 +137,33 @@ export default {
     const new_price = ref(null);
     const old_price = ref(null);
     const product = ref(null);
-    const thumbnail = ref(null);
-    const status = ref(null);
+    const thumbnail = ref([]);
+    let select = ref('')
     const getProducts = async () => {
       const response = await axios.get(`http://localhost:8081/api/products/${route.params.id}`);
+      const thumbnailResponse = await axios.get(`http://localhost:8081/api/products/${route.params.id}/thumbnail`);
       product.value = response.data;
-      thumbnail.value = response.data.thumbnail
-      old_price.value = formatPrice(response.data.old_price);
-      status.value = response.status;
-      new_price.value = formatPrice(response.data.new_price);
+      thumbnail.value = thumbnailResponse.data;
+      select.value = thumbnail.value[0].color
+      old_price.value = response.data.old_price
+      new_price.value = response.data.new_price
     };
     
     function onToggleImage(thumbnail_link) {
       const mainImage = document.querySelector('.product-img-main');
-      mainImage.src = `http://localhost:8081/${thumbnail_link}`;
+      mainImage.src = `http://localhost:8081${thumbnail_link}`;
     }
+
+    function onClick(color) {
+      const chosenThumbnail = thumbnail.value.find(thumb => thumb.color === color);
+      if(chosenThumbnail && chosenThumbnail.number > 0)
+        return true;
+      return false;
+    }
+
+    const status = computed(() => {
+      return onClick(select.value)
+    })
 
     function formatPrice(value) {
       if (!value) {
@@ -158,9 +171,29 @@ export default {
       }
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
+    const cartID = ref('66307d8d9ba2c423918fde9b');
+    const addToCart = async () => {
+    const chosenThumbnail = thumbnail.value.find(thumb => thumb.color === select.value);
+    if (chosenThumbnail && chosenThumbnail.number <= 0) {
+      alert('Sản phẩm đã hết hàng');
+      return;
+    }
+    const CartItemID = await axios.get(`http://localhost:8081/api/shoppingcart/${cartID.value}/thumbnail/${chosenThumbnail._id}/shopcartitem`);
+    if(CartItemID.data){
+      alert('Sản phẩm đã có trong giỏ hàng');
+    } else if(chosenThumbnail && chosenThumbnail.number > 0){
+      await axios.post(`http://localhost:8081/api/shoppingcart/${cartID.value}/thumbnail/${chosenThumbnail._id}/shoppingcartitem`, {
+        productID: product.value._id,
+        price: new_price.value,
+      });
+      alert('Thêm vào giỏ hàng thành công');
+    }
+  }
+
+
     onMounted(getProducts);
     return {
-      product, thumbnail, new_price, old_price, status, onToggleImage
+      formatPrice,addToCart ,status, select, product, thumbnail, new_price, old_price, onToggleImage, onClick
     };
   },
 };

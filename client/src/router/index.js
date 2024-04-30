@@ -1,54 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
 import NotFound from "../views/404Page.vue";
-import About from "../views/About.vue"; 
-import AddCategory from "../views/Category/addCategory.vue";
-import AllProducts from "../views/AllProducts.vue"
-import LoginSignUp from "../views/LoginSignup.vue"
-import Register from "../components/loginsignup/SignUp.vue"
-import Cart from "../views/Cart.vue"
-import ProductDetails from "../components/product/ProductDetails.vue"
+import admin from "./admin.js"
+import client from "./client.js"
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/about",
-    name: "About",
-    component: About,
-  },
-  {
-    path: "/allproducts",
-    name: "AllProducts",
-    component: AllProducts,
-  },
-  {
-    path: "/allproducts/:id",
-    name: "ProductsDetails",
-    component: ProductDetails,
-  },
-  {
-    path: "/loginsignup",
-    name: "LoginSignUp",
-    component: LoginSignUp,
-  },
-  {
-    path: "/loginsignup/register",
-    name: "Register",
-    component: Register,
-  },
-  {
-    path: "/cart",
-    name: "Cart",
-    component: Cart,
-  },
-  {
-    path: "/admin/category/add",
-    name: "AddCategory",
-    component: AddCategory,
-  },
+  ...admin,
+  ...client,
   {
     path: "/:pathMatch(.*)*",
     component: NotFound,

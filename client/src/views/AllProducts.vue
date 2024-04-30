@@ -1,5 +1,6 @@
 <template>
   <div>
+ 
     <!-- ProductGrid -->
     <div class="container">
       <h1 class="my-4 text-uppercase">Tất cả sản phẩm</h1>
@@ -14,17 +15,19 @@
         </ul>
       </nav>
     </div>
+  
   </div>
 </template>
 
 <script>
+
 import axios from "axios";
 import { ref } from "vue"
 import ProductGrid from "../components/product/ProductGrid.vue";
 
 export default {
   components: {
-    ProductGrid,
+    ProductGrid
   },
   setup() {
     const products = ref(null);
@@ -32,7 +35,6 @@ export default {
     const getProducts = async () => {
         const response = await axios.get(`http://localhost:8081/api/products?page=${currentPage.value}`);
         products.value = response.data;
-        console.log(response.data)
     };
     function nextPage() {
       currentPage.value++;

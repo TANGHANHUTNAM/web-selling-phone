@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <section class="bg-light my-5">
      
     </section>
@@ -140,5 +141,14 @@
         </div>
       </div>
     </section>
+    </div>
   </div>
 </template> 
+
+<script>
+export default {
+  name: "About",
+  components: {
+  }
+};
+</script>

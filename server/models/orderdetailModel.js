@@ -20,6 +20,12 @@ const orderdetailSchema = new Schema({
         type: Number,
         required: true,
     },
+},
+{
+    timestamps: true,
+},
+{
+    collection: 'orderdetails'
 });
 
 const OrderDetailModel = mongoose.model('OrderDetail', orderdetailSchema);

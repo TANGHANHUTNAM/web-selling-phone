@@ -1,6 +1,6 @@
 <template>
   <div>
-    <login-signup />
+    <Login/>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 import Login from "../components/loginsignup/SignIn.vue";
 export default {
   components: {
-    "login-signup": Login,
+    Login
   },
   setup() {
     return {};

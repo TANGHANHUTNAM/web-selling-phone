@@ -5,13 +5,13 @@
         <div class="me-lg-5">
           <div class="d-flex">
             <img
-              :src="product.imgURL"
+              :src="`http://localhost:8081/${product.image}`"
               class="border rounded me-3"
               style="width: 96px; height: 96px"
               alt="..."
             />
             <div class="">
-              <a href="#" class="nav-link">{{ product.name }}</a>
+              <a href="#" class="nav-link">{{ product.new_price }}</a>
               <p class="text-muted">{{ product.des }}</p>
             </div>
           </div>
@@ -31,7 +31,7 @@
         <div class="">
           <text class="h6">{{ product.price_new }}</text> <br />
           <small class="text-muted text-nowrap">
-            {{ product.price_new }} / sản phẩm
+            {{ product.price }}đ / sản phẩm
           </small>
         </div>
       </div>

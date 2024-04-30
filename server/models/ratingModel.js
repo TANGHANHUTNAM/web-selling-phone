@@ -26,3 +26,9 @@ const ratingSchema = new Schema({
 
 const RatingModel = mongoose.model("Rating", ratingSchema);
 module.exports = RatingModel;
+
+// RatingModel.create({
+//     productID: "ss",
+//     userID: "ss",
+//     number_star: 5
+// })

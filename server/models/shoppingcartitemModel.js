@@ -8,7 +8,8 @@ const shoppingcartitemSchema = new Schema({
     },
     productID:{
         type: String,
-        ref: "Product"
+        ref: 'Product',
+        required: true,
     },
     quantity: {
         type: Number,
@@ -17,6 +18,11 @@ const shoppingcartitemSchema = new Schema({
     price: {
         type: String,
         required: true,
+    },
+    thumnail: {
+        type: String,
+        required: true,
+        ref: "Thumnail"
     },
 },
 {

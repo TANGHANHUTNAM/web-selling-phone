@@ -15,7 +15,7 @@ import ProductGridItem from "./ProductGridItem.vue";
 export default {
   name: "ProductGrid",
   props: {
-    products: [Array, Object]
+    products: [Array, Object],
   },
   components: {
     ProductGridItem,

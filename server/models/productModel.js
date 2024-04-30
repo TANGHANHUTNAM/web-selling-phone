@@ -3,35 +3,15 @@ const Schema = mongoose.Schema;
 
 const productSchema = new Schema(
   {
-    id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
     title: {
       type: String,
       required: true,
+      unique: true
     },
     des: {
       type: String,
       required: true,
     },
-    thumbnail: [
-      {
-        thumbnail_link: {
-          type: String,
-          required: true,
-        },
-        color: {
-          type: String,
-          required: true,
-        },
-        number: {
-          type: Number,
-          required: true, 
-        }
-      },
-    ],
     brand: {
       type: String,
       required: true,
@@ -82,15 +62,9 @@ const ProductModel = mongoose.model("Product", productSchema);
 module.exports = ProductModel;
 
 // ProductModel.create({
-//   id: 16,
-//   title: "Oppo Reno11",
-//   des: "Oppo Reno11 128GB Xanh Chính Hãng VN/A",
-//   thumbnail: [
-//     // { thumbnail_link: "./images/iphone15_vang.jpg", color: "Vàng", number: 5},
-//     { thumbnail_link: "./images/opporeno11_xanh.jpg", color: "Xanh", number: 2},
-//     // { thumbnail_link: "./images/opporeno11pro_xam.jpg", color: "Xám", number: 2},
-//   ],
-//   brand: "Oppo",
+//   title: "Iphone 12",
+//   des: "Iphone 12 128GB Trắng/Đỏ Chính Hãng VN/A",
+//   brand: "Apple",
 //   new_price: "12000000",
 //   old_price: "13000000",
 //   rom: "128GB",

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <Carousel />
-    <Category />
-    <NewProduct />
-    <Banner />
-    <Recommend />
+      <Carousel />
+      <Category />
+      <NewProduct />
+      <Banner />
+      <Recommend />
   </div>
 </template>
 

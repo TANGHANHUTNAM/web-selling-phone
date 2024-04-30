@@ -41,9 +41,9 @@ const UserModel = mongoose.model("User", userSchema);
 module.exports = UserModel;
 
 // UserModel.create({
-//     fullName: "Nhựt Nam",
-//     phoneNumber: "0363655371",
+//     fullName: "Admin",
+//     phoneNumber: "036323232323",
 //     address: "An Giang",
 //     password: "123456",
-//     email: "admin@gmail.com",
+//     email: "tess@gmail.com",
 // })

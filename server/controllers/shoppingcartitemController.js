@@ -3,31 +3,18 @@ const ShoppingCartModel = require("../models/shoppingcartModel");
 const ProductModel = require("../models/productModel");
 // ADD PRODUCT TO CART
 const addProductToCart = async (req, res) => {
-    const product = req.body
+    const {productID, price} = req.body
+    const thumbnailID = req.params.thumbnailID
     const cartID = req.params.cartID
-    const productIsExist = await ShoppingCartItemModel.find({productID: product._id})
-    console.log(productIsExist)
-    if(productIsExist.length === 0) {
-        await ShoppingCartItemModel.create({
-            shopcartID: cartID,
-            productID: product._id,
-            price: product.new_price
-        })
-        .then(data => {
-            res.status(200).json(data)
-        })
-    } else {
-        await ShoppingCartItemModel.findOneAndUpdate(
-            {productID: product._id},
-            {
-                $inc: {quantity: 1}
-            }
-        )
-        .then(data => {
-            res.status(200).json(data)
-        })
-    }
-
+    await ShoppingCartItemModel.create({
+        shopcartID: cartID,
+        productID: productID,
+        price: price,
+        thumnail: thumbnailID
+    })
+    .then(data => {
+        res.status(200).json(data)
+    })
 }
 
 // DELETE ITEM FROM CART
@@ -46,4 +33,28 @@ const deleteItemFromCart = async (req, res) => {
     })
 }
 
-module.exports = { addProductToCart, deleteItemFromCart }
+// GET ITEM IN CART
+const getItemInCart = async (req, res) => {
+    const cartID = req.params.cartID
+    const itemInCart = await ShoppingCartItemModel.find({shopcartID: cartID})
+    .populate('productID')
+    .populate()
+    if(itemInCart) {
+        res.status(200).json(itemInCart)
+    } else {
+        res.status(404).json({message: 'Không tìm thấy sản phẩm trong giỏ hàng'})
+    }
+}
+
+// GET THUMBNAIL BY ID IN SHOPPING CART
+const getItemCartByThumbnailID = async (req, res) => {
+    const thumbnailID = req.params.thumbnailID
+    const cartID = req.params.cartID
+    const CartItem = await ShoppingCartItemModel.find({shopcartID: cartID, thumnail: thumbnailID})
+    if(CartItem.length > 0) {
+        res.status(200).json(CartItem)
+    } else {
+        res.status(404).json({message: 'Không tìm thấy sản phẩm trong giỏ hàng'})
+    }
+}
+module.exports = {getItemCartByThumbnailID, addProductToCart, deleteItemFromCart, getItemInCart }

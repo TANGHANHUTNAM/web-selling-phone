@@ -1,11 +1,7 @@
 <template>
   <div class="col g-3">
     <div class="card card-item p-2 w-100 h-100 rounded-4 product-item-card d-flex flex-column">
-      <router-link
-        class="text-decoration-none text-dark d-flex flex-column h-100"
-        :to="{ name: 'ProductsDetails', params: { id: product._id } }"
-      >
-        <img v-if="thumbnails.length > 0" :src="`http://localhost:8081${thumbnails[0].thumbnail_link}`" class="card-img-top" alt="" />
+        <img :src="`http://localhost:8081${product.thumbnail}`" class="card-img-top" alt="" />
         <div class="card-body p-1 d-flex flex-column justify-content-around">
           <h6 class="card-title d-flex justify-content-center align-items-center product-item-card-name text-center">{{ product.title }}</h6>
           <p class="card-text w-100 m-0 product-item-card-des h-50">
@@ -16,10 +12,14 @@
             <small class="product-item-price-old">{{ formatPrice(product.old_price)}}đ</small>
           </div>
           <p class="">
-            Đánh giá: {{ product.total_rating }}
+            Đánh giá: {{ product.rating }}
             <i class="bi bi-star-fill product-item-rating"></i>
           </p>
         </div>
+      <router-link
+      class="text-decoration-none text-dark d-flex flex-column h-100"
+      :to="{ name: 'ProductsDetails', params: { id: product._id } }"
+      >
       <div class="btn btn-primary mb-1 btn-add-cart">Xem chi tiết</div>
       </router-link>
     </div>
@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import {ref, onMounted} from "vue"
+// import axios from "axios";
+// import {ref, onMounted} from "vue"
 export default {
   name: "ProductGridItem",
   props: {
@@ -36,16 +36,7 @@ export default {
       Object, Array
     ],
   },
-  setup(props) {
-    const items = ref(props.product)
-    const thumbnails = ref([])
-    const getThumbnail = async () => {
-      const response = await axios.get(`http://localhost:8081/api/products/${items.value._id}/thumbnail`);
-      thumbnails.value = response.data;
-    }
-    onMounted(() => {
-      getThumbnail()
-    })
+  setup() {
     function formatPrice(value) {
       if (!value) {
         return '';
@@ -53,7 +44,7 @@ export default {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
     return {
-      formatPrice, thumbnails
+      formatPrice
     }
   }
 }
@@ -91,5 +82,15 @@ export default {
 .btn-add-cart{
   font-weight: 600;
   font-size: clamp(0.75rem, 1vw, 1.2rem);
+  border: none
+}
+
+.btn-add-cart:hover {
+  background-color: var(--primary-red);
+
+}
+
+.card-img-top:hover {
+  transform: scale(1.02)
 }
 </style>

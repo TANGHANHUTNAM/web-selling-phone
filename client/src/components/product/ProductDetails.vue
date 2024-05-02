@@ -14,24 +14,24 @@
               >
                 <img
                   class="rounded-4 fit p-3 product-img-main"
-                  :src="`http://localhost:8081${thumbnail[0].thumbnail_link}`"
+                  :src="`http://localhost:8081${product.thumbnail}`"
                 />
               </div>
             </div>
-            <div class="d-flex justify-content-center mb-3">
+            <div class="d-flex justify-content-center mb-3" v-if="gallery.length > 0">
               <div
-                v-for="thumb in thumbnail" :key="thumb._id"
+                v-for="item in gallery" :key="item._id"
                 data-fslightbox="mygalley"
                 class="border mx-1 rounded-2 product-img-thumb"
                 target="_blank"
                 data-type="image"
-                @click="onToggleImage(thumb.thumbnail_link)"
+                @click="onToggleImage(item.link)"
               >
                 <img 
                   width="60"
                   height="60"
                   class="rounded-2"
-                  :src="`http://localhost:8081${thumb.thumbnail_link}`"
+                  :src="`http://localhost:8081${item.link}`"
                 />
               </div>
         
@@ -47,22 +47,22 @@
               <div class="d-flex flex-row my-3">
                 <div class="text-warning mb-1 me-2">
                   <i class="bi bi-star-fill"></i>
-                  <span class="ms-1"> {{ product.star }} </span>
+                  <span class="ms-1">{{ product.rating }}</span>
                 </div>
-                <span class="text-muted"
+                <!-- <span class="text-muted"
                   ><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 đã
                   bán</span
-                >
-                <span v-if="status" class="text-success ms-2 ">Còn hàng</span>
-                <span v-else-if="!status" class="text-danger ms-2">Hết hàng</span>
+                > -->
+                <span v-if="product.number > 0" class="text-success ms-2 ">Còn hàng {{ product.number }}</span>
+                <span v-else class="text-danger ms-2">Hết hàng</span>
               </div>
 
               <div class="mb-3">
-                <span class="h5 product-new-price">{{ formatPrice(new_price) }}đ</span>
+                <span class="h5 product-new-price">{{ formatPrice(product.new_price) }}đ</span>
                 <span class="text-muted">/sản phẩm</span>
                 <p>
                   <span class="product-details-old-price">
-                    {{formatPrice(old_price)}}đ</span
+                    {{formatPrice(product.old_price)}}đ</span
                   >
                 </p>
               </div>
@@ -72,16 +72,18 @@
               </h5>
 
               <div class="row">
+                <dt class="col-3">Màu</dt>
+                <dd class="col-9">{{ product.color }}</dd>
                 <dt class="col-3">Bộ nhớ</dt>
-                <dd class="col-9">{{ product.rom }}</dd>
+                <dd class="col-9">{{ product.rom }} GB</dd>
                 <dt class="col-3">Hãng</dt>
-                <dd class="col-9">{{ product.brand }}</dd>
+                <dd class="col-9">{{ brand.name }}</dd>
               </div>
 
               <hr />
 
               <div class="row mb-4">
-                <div class="col-md-4 col-6">
+                <!-- <div class="col-md-4 col-6">
                   <label class="mb-2">Color</label>
                   <select
                     class="form-select border border-secondary"
@@ -90,7 +92,7 @@
                   >
                     <option :value="thumb.color"  @click="onClick(thumb.color)" v-for="thumb in thumbnail" :key="thumb._id">{{ thumb.color }}</option>
                   </select>
-                </div>
+                </div> -->
                 <!-- col.// -->
                 <!-- <div class="col-md-4 col-6 mb-3">
                   <label class="mb-2 d-block">Quantity</label>
@@ -106,10 +108,23 @@
                     Mua ngay
                   </div> -->
                   <div
-                    @click="addToCart()"
-                    class="btn btn-warning shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
+                    v-if="showSuccess && !isItemInCart"
+                    class="btn-add-cart-success btn btn-primary shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
                   >
-                    <i class="me-1 fa fa-shopping-basket"></i> Thêm vào giỏ hàng
+                    <i class=" me-1 fa fa-shopping-basket"></i> Sản phẩm đã thêm vào giỏ hàng!
+                  </div>
+                  <div
+                  @click="addToCart()"
+                    v-if="!showSuccess && !isItemInCart"
+                    class="btn-add-cart-failure btn btn-warning shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
+                  >
+                    <i class=" me-1 fa fa-shopping-basket"></i> Thêm vào giỏ hàng 
+                  </div>
+                  <div
+                    v-if="isItemInCart"
+                    class="btn btn-cart-is-in-cart shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
+                  >
+                    <i class="me-1 fa fa-shopping-basket"></i> Sản phẩm đã tồn tại trong giỏ hàng!
                   </div>
                 </div>
               </div>
@@ -127,73 +142,66 @@
 import NotFound from "../../views/404Page.vue";
 import axios from "axios"
 import { useRoute } from "vue-router";
-import { ref, onMounted, computed} from "vue";
+import { ref, onMounted, computed } from "vue";
 export default {
   components: {
     "not-found": NotFound,
   },
   setup() {
+    // const userID = ref("66337a4d25a1b036070f339f")
     const route = useRoute();
-    const new_price = ref(null);
-    const old_price = ref(null);
-    const product = ref(null);
-    const thumbnail = ref([]);
-    let select = ref('')
-    const getProducts = async () => {
-      const response = await axios.get(`http://localhost:8081/api/products/${route.params.id}`);
-      const thumbnailResponse = await axios.get(`http://localhost:8081/api/products/${route.params.id}/thumbnail`);
-      product.value = response.data;
-      thumbnail.value = thumbnailResponse.data;
-      select.value = thumbnail.value[0].color
-      old_price.value = response.data.old_price
-      new_price.value = response.data.new_price
+    // Lấy tất cả sản phẩm
+    const product = ref({});
+    const gallery = ref([]);
+    const brand = ref({});
+    const itemInCart = ref([]);
+    const getProduct = async () => {
+      const resultProduct = await axios.get(`http://localhost:8081/api/product/${route.params.id}`);
+      const resultGallery = await axios.get(`http://localhost:8081/api/gallery/product/${route.params.id}`);
+      const resultItemInCart = await axios.get(`http://localhost:8081/api/cartitem/user/${userID.value}`);
+      product.value = resultProduct.data;
+      gallery.value = resultGallery.data
+      brand.value = resultProduct.data.brand
+      itemInCart.value = resultItemInCart.data
     };
     
-    function onToggleImage(thumbnail_link) {
+
+    // Xem gallery
+    function onToggleImage(gallery_link) {
       const mainImage = document.querySelector('.product-img-main');
-      mainImage.src = `http://localhost:8081${thumbnail_link}`;
+      mainImage.src = `http://localhost:8081${gallery_link}`;
     }
-
-    function onClick(color) {
-      const chosenThumbnail = thumbnail.value.find(thumb => thumb.color === color);
-      if(chosenThumbnail && chosenThumbnail.number > 0)
-        return true;
-      return false;
-    }
-
-    const status = computed(() => {
-      return onClick(select.value)
+    
+    // Thêm sản phẩm vào giỏ hàng
+    const userID = ref("66337a4d25a1b036070f339f")
+    const showSuccess = ref(false)
+    const addToCart = async () => {
+    axios.post(`http://localhost:8081/api/cartitem/user/${userID.value}`,{
+      productID: product.value._id,
+      price: product.value.new_price,
     })
+    .then((res) => {
+      console.log(res.data)
+    });
+      showSuccess.value = true;
+    };
 
+    // Check sản phẩm trong giỏ hàng
+    const itemIsInCart = computed(() => {
+      return itemInCart.value.some((item) => item.productID === product.value._id);
+    });
+
+    // Định dạng giá sản phẩm
     function formatPrice(value) {
       if (!value) {
         return '';
       }
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
-    const cartID = ref('66307d8d9ba2c423918fde9b');
-    const addToCart = async () => {
-    const chosenThumbnail = thumbnail.value.find(thumb => thumb.color === select.value);
-    if (chosenThumbnail && chosenThumbnail.number <= 0) {
-      alert('Sản phẩm đã hết hàng');
-      return;
-    }
-    const CartItemID = await axios.get(`http://localhost:8081/api/shoppingcart/${cartID.value}/thumbnail/${chosenThumbnail._id}/shopcartitem`);
-    if(CartItemID.data){
-      alert('Sản phẩm đã có trong giỏ hàng');
-    } else if(chosenThumbnail && chosenThumbnail.number > 0){
-      await axios.post(`http://localhost:8081/api/shoppingcart/${cartID.value}/thumbnail/${chosenThumbnail._id}/shoppingcartitem`, {
-        productID: product.value._id,
-        price: new_price.value,
-      });
-      alert('Thêm vào giỏ hàng thành công');
-    }
-  }
 
-
-    onMounted(getProducts);
+    onMounted(getProduct);
     return {
-      formatPrice,addToCart ,status, select, product, thumbnail, new_price, old_price, onToggleImage, onClick
+      formatPrice, product, gallery, brand , onToggleImage, addToCart, showSuccess, isItemInCart: itemIsInCart
     };
   },
 };
@@ -222,5 +230,25 @@ export default {
 
 .product-img-thumb {
   cursor: pointer;
+}
+
+.btn-add-cart-failure {
+  border: none;
+  background-color: var(--primary-red)
+}
+
+.btn-add-cart-failure:hover {
+  background-color: var(--primary-blue);
+}
+
+
+.btn-add-cart-success {
+  background-color: #198754;
+  border: none; 
+}
+
+.btn-cart-is-in-cart{
+  background-color: gray;
+  border: none;
 }
 </style>

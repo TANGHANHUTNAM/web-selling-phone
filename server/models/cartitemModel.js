@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const shoppingcartitemSchema = new Schema({
-    shopcartID: {
+const cartitemSchema = new Schema({
+    userID:{
         type: String,
-        ref: "ShoppingCart"
+        ref: 'User',
+        required: true,
     },
     productID:{
         type: String,
@@ -19,19 +20,14 @@ const shoppingcartitemSchema = new Schema({
         type: String,
         required: true,
     },
-    thumnail: {
-        type: String,
-        required: true,
-        ref: "Thumnail"
-    },
 },
 {
     timestamps: true,
 },
 {
-    collection: "shoppingcartitems"
+    collection: "cartitems"
 }
 );
 
-const ShoppingCartItemModel = mongoose.model("ShoppingCartItem", shoppingcartitemSchema);
-module.exports = ShoppingCartItemModel;
+const CartItemModel = mongoose.model("Cartitem", cartitemSchema);
+module.exports = CartItemModel;

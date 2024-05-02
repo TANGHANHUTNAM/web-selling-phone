@@ -4,6 +4,7 @@ const ProductModel = require("../models/productModel");
 const getProductByID = async (req, res) => {
     var productID = req.params.productID;
     await ProductModel.findById(productID)
+    .populate('brand')
     .then(data => {
         res.json(data)
     })
@@ -38,9 +39,37 @@ const getAllProduct = async (req, res) => {
 
 // GET PRODUCT BY BRAND
 const getProductByBrand = async (req, res) => {
-
+    const brand = req.params.brandID;
+    await ProductModel.find({brand: brand})
+    .then(data => {
+        res.status(200).json(data)
+    })
+    .catch(error => {
+        res.status(500).json(error)
+    })
 }
 
+// 
+const addNewProduct = async (req, res) => {
+    const {title, des, color, brand, number, thumbnail, new_price, rom} = req.body;
+    const product = new ProductModel({
+        title: title,
+        des: des,
+        color: color,
+        brand: brand,
+        number: number,
+        thumbnail: thumbnail,
+        new_price: new_price,
+        rom: rom,
+    })
+    await product.save()
+    .then(data => {
+        res.status(200).json(data)
+    })
+    .catch(error => {
+        res.status(500).json(error)
+    })
+}
 module.exports = {
-    getAllProduct, getProductByID, getProductByBrand
+    getAllProduct, getProductByID, getProductByBrand, addNewProduct
 }

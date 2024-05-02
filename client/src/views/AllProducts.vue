@@ -33,7 +33,7 @@ export default {
     const products = ref(null);
     const currentPage = ref(1);
     const getProducts = async () => {
-        const response = await axios.get(`http://localhost:8081/api/products?page=${currentPage.value}`);
+        const response = await axios.get(`http://localhost:8081/api/product?page=${currentPage.value}`);
         products.value = response.data;
     };
     function nextPage() {
@@ -46,13 +46,9 @@ export default {
         getProducts();
       }
     }
-    function onLoadPage(page){
-      currentPage.value = page;
-      getProducts();
-    }
     getProducts();  
     return {
-      products, nextPage, prePage, onLoadPage
+      products, nextPage, prePage
     };
   },
 };

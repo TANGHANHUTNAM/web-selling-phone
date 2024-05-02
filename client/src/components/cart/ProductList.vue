@@ -1,21 +1,32 @@
 <template>
-  <div v-if="products.length > 0">
+  <div>
     <ProductListItem
-      v-for="product in products"
-      :key="product.id"
-      :product="product"
+      v-for="shoppingcartitem in shoppingcartitems"
+      :key="shoppingcartitem._id"
+      :shoppingcartitem="shoppingcartitem"
+      @remove-item-from-cart="removeItemFromCart"
     />
   </div>
-  <p v-else>Bạn không có sản phẩm nào trong giỏ hàng!!</p>
+  <!-- <h5 class="p-5 text-center" v-else>Bạn không có sản phẩm nào trong giỏ hàng!!</h5> -->
 </template>
 
 <script>
 import ProductListItem from "./ProductListItem";
 export default {
   name: "ProductList",
-  props: ['products'],
-  components: {
+  props: {
+    shoppingcartitems: [Array, Object]
+  },
+  components: {   
     ProductListItem,
   },
+  setup(props, context){
+    const removeItemFromCart = ($event) => {
+      context.emit('remove-from-cart', $event);
+    }
+    return {
+      removeItemFromCart
+    }
+  }
 };
 </script>

@@ -4,6 +4,7 @@ const CartItemModel = require("../models/cartitemModel");
 const getAllCartItemByUserID = async (req, res) => {
     var userID = req.params.userID;
     await CartItemModel.find({userID: userID})
+    .populate('productID')
     .then(data => {
         res.status(200).json(data)
     })
@@ -34,7 +35,8 @@ const addNewCartItem = async (req, res) => {
 // Delete cart item by product ID
 const deleteItemByProductID = async (req, res) => {
     var productID = req.params.productID;
-    await CartItemModel.deleteOne({productID: productID})
+    var userID = req.params.userID;
+    await CartItemModel.deleteOne({productID: productID, userID: userID})
     .then(data => {
         res.status(200).json(data)
     })

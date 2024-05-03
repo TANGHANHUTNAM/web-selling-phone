@@ -1,18 +1,18 @@
 <template>
-  <div class="m-4" v-if="shoppingcartitem">
+  <div class="m-4" v-if="item">
     <div class="row gy-3 mb-4">
       <div class="col-lg-5">
         <div class="me-lg-5">
           <div class="d-flex">
             <img
-              :src="`http://localhost:8081${shoppingcartitem.thumbnail.thumbnail_link}`"
+              :src="`http://localhost:8081${item.productID.thumbnail}`"
               class="border rounded me-3"
               style="width: 96px; height: 96px"
               alt="..."
             />
             <div class="">
-              <h5 class="nav-link">{{ shoppingcartitem.productID.title }}</h5>
-              <p class="text-muted">{{ shoppingcartitem.productID.des }}</p>
+              <h5 class="nav-link">{{ item.productID.title }}</h5>
+              <p class="text-muted">{{ item.productID.des }}</p>
             </div>
           </div>
         </div>
@@ -22,13 +22,13 @@
       >
         <div class="">
           <select style="width: 100px" class="form-select me-4" v-model="select_number">
-            <option @click="updateQuantity(shoppingcartitem._id)" :value="number" v-for="number in shoppingcartitem.thumbnail.number" :key="number">{{number}}</option>
+            <option :value="number" v-for="number in item.productID.number" :key="number">{{number}}</option>
           </select>
         </div>
         <div class="">
           <text class="h6">{{ formatPrice(totalPriceItem) }}đ</text> <br />
           <small class="text-muted text-nowrap">
-            {{ formatPrice(shoppingcartitem.price) }}đ / sản phẩm
+            {{ formatPrice(item.productID.new_price) }}đ / sản phẩm
           </small>
         </div>
       </div>
@@ -43,7 +43,7 @@
                       ></a> -->
           <div
             class="btn btn-light border text-danger icon-hover-danger"
-            @click="removeItem(shoppingcartitem._id)"
+            @click="removeItem(item.productID._id)"
           >
             Xóa</div
           >
@@ -54,16 +54,27 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import { ref, computed} from "vue";
 export default {
   name: "ProductListItem",
   props: {
-    shoppingcartitem: [Object, Array]
+    item: [Object, Array]
   },
   setup(props, context) {
-    const select_number = ref(props.shoppingcartitem.quantity);
-    const itemInCart = ref(props.shoppingcartitem);
+    const select_number = ref(props.item.quantity);
+    const item = ref(props.item);
+
+    const totalPriceItem = computed(() => {
+      return item.value.price * select_number.value;
+    });
+    
+    // Xóa sản phẩm khỏi giỏ hàng
+    const removeItem = async (productID) => {
+        context.emit('remove-item-from-cart', productID);
+    }
+
+    // Định dạng giá sản phẩm
     function formatPrice(value) {
       if (!value) {
         return '';
@@ -71,23 +82,8 @@ export default {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
-    const totalPriceItem = computed(() => {
-      return itemInCart.value.price * select_number.value;
-    });
-    
-    const removeItem = async (itemID) => {
-        context.emit('remove-item-from-cart', itemID);
-    }
-
-    const updateQuantity = async (itemID) => {
-      const response = await axios.put(`http://localhost:8081/api/shoppingcart/cartItem/${itemID}`, {
-        quantity: select_number.value
-      });
-      itemInCart.value = response.data;
-    }
-
     return {
-      formatPrice, select_number, totalPriceItem, removeItem, updateQuantity
+      formatPrice, select_number, totalPriceItem, removeItem
     };
     
   },

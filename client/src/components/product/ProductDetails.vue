@@ -108,20 +108,20 @@
                     Mua ngay
                   </div> -->
                   <div
-                    v-if="showSuccess && !isItemInCart"
-                    class="btn-add-cart-success btn btn-primary shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
-                  >
-                    <i class=" me-1 fa fa-shopping-basket"></i> Sản phẩm đã thêm vào giỏ hàng!
-                  </div>
-                  <div
                   @click="addToCart()"
-                    v-if="!showSuccess && !isItemInCart"
+                    v-if="!ItemIsInCart && !showSuccess"
                     class="btn-add-cart-failure btn btn-warning shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
                   >
                     <i class=" me-1 fa fa-shopping-basket"></i> Thêm vào giỏ hàng 
+                  </div>  
+                  <div
+                    v-if="showSuccess && !ItemIsInCart"
+                    class="btn-add-cart-success btn btn-primary shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
+                  >
+                    <i class=" me-1 fa fa-shopping-basket"></i> Đã thêm sản phẩm vào giỏ hàng!
                   </div>
                   <div
-                    v-if="isItemInCart"
+                    v-if="ItemIsInCart"
                     class="btn btn-cart-is-in-cart shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
                   >
                     <i class="me-1 fa fa-shopping-basket"></i> Sản phẩm đã tồn tại trong giỏ hàng!
@@ -142,7 +142,7 @@
 import NotFound from "../../views/404Page.vue";
 import axios from "axios"
 import { useRoute } from "vue-router";
-import { ref, onMounted, computed } from "vue";
+import { ref, computed, onMounted} from "vue";
 export default {
   components: {
     "not-found": NotFound,
@@ -151,6 +151,7 @@ export default {
     // const userID = ref("66337a4d25a1b036070f339f")
     const route = useRoute();
     // Lấy tất cả sản phẩm
+    const userID = ref("66337a4d25a1b036070f339f")
     const product = ref({});
     const gallery = ref([]);
     const brand = ref({});
@@ -162,7 +163,8 @@ export default {
       product.value = resultProduct.data;
       gallery.value = resultGallery.data
       brand.value = resultProduct.data.brand
-      itemInCart.value = resultItemInCart.data
+      itemInCart.value = resultItemInCart.data 
+      console.log(itemInCart.value)
     };
     
 
@@ -173,7 +175,7 @@ export default {
     }
     
     // Thêm sản phẩm vào giỏ hàng
-    const userID = ref("66337a4d25a1b036070f339f")
+    
     const showSuccess = ref(false)
     const addToCart = async () => {
     axios.post(`http://localhost:8081/api/cartitem/user/${userID.value}`,{
@@ -187,8 +189,8 @@ export default {
     };
 
     // Check sản phẩm trong giỏ hàng
-    const itemIsInCart = computed(() => {
-      return itemInCart.value.some((item) => item.productID === product.value._id);
+    const ItemIsInCart = computed(() => {
+      return itemInCart.value.some((item) => item.productID._id === product.value._id);
     });
 
     // Định dạng giá sản phẩm
@@ -198,12 +200,12 @@ export default {
       }
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
-
+    console.log(ItemIsInCart.value)
     onMounted(getProduct);
     return {
-      formatPrice, product, gallery, brand , onToggleImage, addToCart, showSuccess, isItemInCart: itemIsInCart
+      getProduct ,formatPrice, product, gallery, brand , onToggleImage, addToCart, showSuccess, ItemIsInCart
     };
-  },
+  },  
 };
 </script>
 

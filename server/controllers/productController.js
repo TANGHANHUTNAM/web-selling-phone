@@ -70,6 +70,55 @@ const addNewProduct = async (req, res) => {
         res.status(500).json(error)
     })
 }
+
+// GET ALL NEW PRODUCT
+const PAGE_SIZE_NewProduct = 5
+const getAllNewProduct = async (req, res) => {
+    var page = req.query.page;
+    if(page){
+        page = parseInt(page);
+        if(page <= 0) page = 1;
+        var elementsPass = (page -1)*PAGE_SIZE_NewProduct;
+        await ProductModel.find({is_newProduct: 1}).skip(elementsPass).limit(PAGE_SIZE_NewProduct)
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
+    } else {
+        await ProductModel.find({is_newProduct: 1}).then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
+            res.status(500).json(error)
+        })
+    }
+}
+
+// Get All Bestseller Product
+const PAGE_SIZE_BestSeller = 5
+const getAllBestsellerProduct = async (req, res) => {
+    var page = req.query.page;
+    if(page){
+        page = parseInt(page);
+        if(page <= 0) page = 1;
+        var elementsPass = (page -1)*PAGE_SIZE_BestSeller;
+        await ProductModel.find({is_bestSeller: 1}).skip(elementsPass).limit(PAGE_SIZE_BestSeller)
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
+    } else {
+        await ProductModel.find({is_bestSeller: 1}).then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
+            res.status(500).json(error)
+        })
+    }
+}
+
 module.exports = {
-    getAllProduct, getProductByID, getProductByBrand, addNewProduct
+    getAllProduct, getProductByID, getProductByBrand, addNewProduct, getAllNewProduct, getAllBestsellerProduct
 }

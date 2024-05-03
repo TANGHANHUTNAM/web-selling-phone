@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div v-if="itemsInCart.length > 0">
     <ProductListItem
-      v-for="shoppingcartitem in shoppingcartitems"
-      :key="shoppingcartitem._id"
-      :shoppingcartitem="shoppingcartitem"
+      v-for="item in itemsInCart"
+      :key="item._id"
+      :item="item"
       @remove-item-from-cart="removeItemFromCart"
     />
   </div>
-  <!-- <h5 class="p-5 text-center" v-else>Bạn không có sản phẩm nào trong giỏ hàng!!</h5> -->
+  <h5 class="p-5 text-center" v-else>Bạn không có sản phẩm nào trong giỏ hàng!!</h5>
 </template>
 
 <script>
@@ -15,7 +15,7 @@ import ProductListItem from "./ProductListItem";
 export default {
   name: "ProductList",
   props: {
-    shoppingcartitems: [Array, Object]
+    itemsInCart: [Array, Object]
   },
   components: {   
     ProductListItem,

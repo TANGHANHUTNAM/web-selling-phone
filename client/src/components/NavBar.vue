@@ -25,7 +25,7 @@
       <router-link class="nav-router-link" :to="{ name: 'Cart' }" @click.prevent="onClick(5)">
         <div class="nav-cart">
           <div><i class="bi bi-cart"></i></div>
-          <div class="nav-cart-count">0</div>
+          <div class="nav-cart-count">{{ cartCount }}</div>
         </div>
       </router-link>
     </div>
@@ -50,7 +50,8 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import axios from "axios";
+import { reactive, ref, onMounted} from "vue";
 export default {
   setup() {
     const navlinks = reactive([
@@ -61,8 +62,8 @@ export default {
       },
       {
         id: 2,
-        text: "Giới thiệu",
-        name: "About",
+        text: "Phản hồi",
+        name: "Feedback",
       },
       {
         id: 3,
@@ -95,8 +96,24 @@ export default {
     function resetClick(){
       navlinkRoute.text = "";
     }
+
+
+    // Lấy số lượng sản phẩm trong giỏ hàng
+    const userID = ref("66337a4d25a1b036070f339f");
+    const cartCount = ref(0);
+    const getCountCart = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8081/api/cartitem/user/${userID.value}`);
+        cartCount.value = res.data.length;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    onMounted(() => {
+      getCountCart();
+    });
     return {
-      navlinks, onClick, navlinkRoute, resetClick
+      navlinks, onClick, navlinkRoute, resetClick, cartCount
     };
   },
 };

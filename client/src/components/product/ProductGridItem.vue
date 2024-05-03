@@ -4,12 +4,12 @@
         <img :src="`http://localhost:8081${product.thumbnail}`" class="card-img-top" alt="" />
         <div class="card-body p-1 d-flex flex-column justify-content-around">
           <h6 class="card-title d-flex justify-content-center align-items-center product-item-card-name text-center">{{ product.title }}</h6>
-          <p class="card-text w-100 m-0 product-item-card-des h-50">
+          <p class="card-text w-100 m-0 product-item-card-des">
             {{ product.des }}
           </p>  
           <div class="d-flex w-100 align-items-center my-2 justify-content-between">
             <p class="product-item-price-new">{{ formatPrice(product.new_price) }}đ</p>
-            <small class="product-item-price-old">{{ formatPrice(product.old_price)}}đ</small>
+            <small v-if="Number(product.old_price) > 0" class="product-item-price-old">{{ formatPrice(product.old_price)}}đ</small>
           </div>
           <p class="">
             Đánh giá: {{ product.rating }}
@@ -67,6 +67,7 @@ export default {
 
 .product-item-card-des {
   font-weight: 500;
+  height: 4rem;
 }
 
 .product-item-card {

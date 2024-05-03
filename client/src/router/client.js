@@ -1,6 +1,6 @@
 import ClientLayout from "../layouts/client.vue";
 import HomePage from "../views/Home.vue";
-import AboutPage from "../views/About.vue";
+import FeedbackPage from "../views/Feedback.vue";
 import AllProductsPage from "../views/AllProducts.vue";
 import ProductDetailsPage from "../components/product/ProductDetails.vue";
 import LoginSignUpPage from "../views/LoginSignup.vue";
@@ -19,8 +19,8 @@ const client = [
             },
             {
                 path: "about",
-                name: "About",
-                component: AboutPage,
+                name: "Feedback",
+                component: FeedbackPage,
             },
             {
                 path: "allproducts",

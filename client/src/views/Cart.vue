@@ -9,7 +9,7 @@
               <div class="card border shadow-0">
                 <h4 class="card-title m-4">Giỏ hàng</h4>
                 <!-- Product List -->
-                <ProductList :shoppingcartitems="cartItems" @remove-from-cart="removeItem($event)"/>
+                <ProductList :itemsInCart="cartItems" @remove-from-cart="removeItem($event)"/>
                 <div class="border-top pt-4 mx-4 mb-4">
                   <p>
                     <i class="fas fa-truck text-muted fa-lg"></i> Cửa hàng của
@@ -89,15 +89,29 @@ export default {
     ProductList
   },
   setup() {
-    const cartID = ref('66307d8d9ba2c423918fde9b')
+    
+    
+    //  Lấy tất cả sản phẩm trong giỏ hàng
+    const userID = ref('66337a4d25a1b036070f339f')
     const cartItems = ref([]);
     const getCartItems = async () => {
-      const response = await axios.get(`http://localhost:8081/api/shoppingcart/${cartID.value}/shoppingcartitem`);
+      const response = await axios.get(`http://localhost:8081/api/cartitem/user/${userID.value}`);
       cartItems.value = response.data;
     };  
+
+    
     // const totalPrice = computed(() => {
     //   return cartItems.value.reduce((sum, item) => sum + Number(item.price)*item.quantity, 0);
     // });
+    
+    
+    const removeItem = async (productID) => {
+       const response = await axios.delete(`http://localhost:8081/api/cartitem/user/${userID.value}/product/${productID}`);
+      cartItems.value = response.data;
+      getCartItems()
+    }
+
+    // Định dạng giá
     function formatPrice(value) {
       if (!value) {
         return '';
@@ -107,10 +121,6 @@ export default {
     onMounted(() => {
       getCartItems();
     });
-    const removeItem = async (itemID) => {
-      const response = await axios.delete(`http://localhost:8081/api/shoppingcart/${cartID.value}/shoppingcartitem/${itemID}`);
-      cartItems.value = response.data;
-    }
     return {
     cartItems, formatPrice, removeItem
     };

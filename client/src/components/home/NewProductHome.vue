@@ -1,200 +1,135 @@
 <template>
-  <!-- Products -->
-  <section>
-    <div class="container my-5">
-      <header class="mb-4">
-        <h3>Sản phẩm mới</h3>
-      </header>
-
-      <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card my-2 shadow-0">
-            <a href="#" class="">
-              <div class="mask" style="height: 50px">
-                <div
-                  class="d-flex justify-content-start align-items-start h-100 m-2"
-                >
-                  <h6><span class="badge bg-danger pt-1">New</span></h6>
-                </div>
-              </div>
-              <img
-                src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/1.webp"
-                class="card-img-top rounded-2"
-                style="aspect-ratio: 1 / 1"
-              />
-            </a>
-            <div class="card-body p-0 pt-3">
-              <a
-                href="#!"
-                class="btn btn-light border px-2 pt-2 float-end icon-hover"
-                ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-              ></a>
-              <h5 class="card-title">$29.95</h5>
-              <p class="card-text mb-0">GoPro action camera 4K</p>
-              <p class="text-muted">Model: X-200</p>
-            </div>
+  <div class="col g-3">
+        <div class="card card-item p-2 w-100 h-100 rounded-4 product-item-card d-flex flex-column">
+          <img :src="`http://localhost:8081${product?.thumbnail}`" class="card-img-top" alt="" />
+          <div class="card-body p-1 d-flex flex-column justify-content-around">
+          <h6 class="card-title d-flex justify-content-center align-items-center product-item-card-name text-center">{{ product?.title }}</h6>
+          <p class="card-text w-100 m-0 product-item-card-des">
+            {{ product?.des }}
+          </p>  
+          <div class="d-flex w-100 align-items-center my-2 justify-content-between">
+            <p class="product-item-price-new">{{ formatPrice(product?.new_price) }}đ</p>
+            <small v-if="Number(product.old_price) > 0" class="product-item-price-old">{{formatPrice(product?.old_price)}}đ</small>
           </div>
+          <p class="">
+            Đánh giá: {{ product?.rating }}
+            <i class="bi bi-star-fill product-item-rating"></i>
+          </p>
+          <div v-if="product?.is_newProduct > 0" class="new_product">New</div>
+          <div v-else-if="product?.is_bestSeller > 0" class="bestseller_product">Hot</div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card my-2 shadow-0">
-            <a href="#" class="">
-              <div class="mask" style="height: 50px">
-                <div
-                  class="d-flex justify-content-start align-items-start h-100 m-2"
-                >
-                  <h6>
-                    <span class="badge pt-1" style="background-color: #f87217"
-                      >Offer</span
-                    >
-                  </h6>
-                </div>
-              </div>
-              <img
-                src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/2.webp"
-                class="card-img-top rounded-2"
-                style="aspect-ratio: 1 / 1"
-              />
-            </a>
-            <div class="card-body p-0 pt-2">
-              <a
-                href="#!"
-                class="btn btn-light border px-2 pt-2 float-end icon-hover"
-                ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-              ></a>
-              <h5 class="card-title">$590.00</h5>
-              <p class="card-text mb-0">Canon EOS professional</p>
-              <p class="text-muted">Capacity: 128GB</p>
-            </div>
-          </div>
+      <router-link
+      class="text-decoration-none text-dark d-flex flex-column h-100"
+      :to="{ name: 'ProductsDetails', params: { id: product._id } }"
+      >
+      <div class="btn btn-primary mb-1 btn-add-cart">Xem chi tiết</div>
+      </router-link>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card my-2 shadow-0">
-            <a href="#" class="">
-              <img
-                src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/3.webp"
-                class="card-img-top rounded-2"
-                style="aspect-ratio: 1 / 1"
-              />
-            </a>
-            <div class="card-body p-0 pt-2">
-              <a
-                href="#!"
-                class="btn btn-light border px-2 pt-2 float-end icon-hover"
-                ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-              ></a>
-              <h5 class="card-title">$29.95</h5>
-              <p class="card-text mb-0">Modern product name here</p>
-              <p class="text-muted">Sizes: S, M, XL</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card my-2 shadow-0">
-            <a href="#" class="">
-              <img
-                src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/4.webp"
-                class="card-img-top rounded-2"
-                style="aspect-ratio: 1 / 1"
-              />
-            </a>
-            <div class="card-body p-0 pt-2">
-              <a
-                href="#!"
-                class="btn btn-light border px-2 pt-2 float-end icon-hover"
-                ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-              ></a>
-              <h5 class="card-title">$1099.00</h5>
-              <p class="card-text mb-0">Apple iPhone 13 Pro max</p>
-              <p class="text-muted">Color: Black, Memory: 128GB</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card my-2 shadow-0">
-            <a href="#" class="">
-              <img
-                src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp"
-                class="card-img-top rounded-2"
-                style="aspect-ratio: 1 / 1"
-              />
-            </a>
-            <div class="card-body p-0 pt-2">
-              <a
-                href="#!"
-                class="btn btn-light border px-2 pt-2 float-end icon-hover"
-                ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-              ></a>
-              <h5 class="card-title">$29.95</h5>
-              <p class="card-text mb-0">Modern product name here</p>
-              <p class="text-muted">Sizes: S, M, XL</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card my-2 shadow-0">
-            <a href="#" class="">
-              <img
-                src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/6.webp"
-                class="card-img-top rounded-2"
-                style="aspect-ratio: 1 / 1"
-              />
-            </a>
-            <div class="card-body p-0 pt-2">
-              <a
-                href="#!"
-                class="btn btn-light border px-2 pt-2 float-end icon-hover"
-                ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-              ></a>
-              <h5 class="card-title">$29.95</h5>
-              <p class="card-text mb-0">Modern product name here</p>
-              <p class="text-muted">Model: X-200</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card my-2 shadow-0">
-            <a href="#" class="">
-              <img
-                src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp"
-                class="card-img-top rounded-2"
-                style="aspect-ratio: 1 / 1"
-              />
-            </a>
-            <div class="card-body p-0 pt-2">
-              <a
-                href="#!"
-                class="btn btn-light border px-2 pt-2 float-end icon-hover"
-                ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-              ></a>
-              <h5 class="card-title">$29.95</h5>
-              <p class="card-text mb-0">Modern product name here</p>
-              <p class="text-muted">Sizes: S, M, XL</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card my-2 shadow-0">
-            <a href="#" class="">
-              <img
-                src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
-                class="card-img-top rounded-2"
-                style="aspect-ratio: 1 / 1"
-              />
-            </a>
-            <div class="card-body p-0 pt-2">
-              <a
-                href="#!"
-                class="btn btn-light border px-2 pt-2 float-end icon-hover"
-                ><i class="fas fa-heart fa-lg px-1 text-secondary"></i
-              ></a>
-              <h5 class="card-title">$29.95</h5>
-              <p class="card-text mb-0">Modern product name here</p>
-              <p class="text-muted">Material: Jeans</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Products -->
+  </div>
 </template>
+
+<script>
+export default {
+  name: "NewProductHome",
+  props: {
+    product: [
+      Object, Array]
+  },
+  setup() {
+    
+    // Định dạng giá
+    function formatPrice(value) {
+      if (!value) {
+        return '';
+      }
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+    return {
+      formatPrice
+    }
+  }
+};
+</script>
+
+
+<style scoped>
+.product-item-price-new {
+  margin: 0;
+  color: var(--primary-red);
+}
+.product-item-price-old {
+  margin: 0;
+  text-decoration-line: line-through;
+  color: #878ba2
+}
+
+.product-item-card-name {
+  height: 3rem;
+}
+
+.product-item-card-des {
+  font-weight: 500;
+  min-height: 4rem;
+  height: 4rem;
+}
+
+.product-item-card {
+  cursor: pointer;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  font-size: clamp(0.75rem, 1.2vw, 1.3rem);
+  position: relative;
+}
+
+.product-item-rating {
+  color: var(--primary-yellow);
+}
+
+.btn-add-cart{
+  font-weight: 600;
+  font-size: clamp(0.75rem, 1vw, 1.2rem);
+  border: none
+}
+
+.btn-add-cart:hover {
+  background-color: var(--primary-red);
+
+}
+
+.card-img-top:hover {
+  transform: scale(1.02)
+}
+
+.bestseller_product {
+  position: absolute;
+  font-size: 0.8rem;
+  top: 0.3rem;
+  right: 0.3rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-red);
+  color: white;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.new_product {
+  position: absolute;
+  font-size: 0.8rem;
+  top: 0.3rem;
+  right: 0.3rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-red);
+  color: white;
+  padding: 0;
+  border-radius: 50%;
+}
+
+</style>
+

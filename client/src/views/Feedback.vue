@@ -5,7 +5,7 @@
       <div class="container">
         <div class="row py-4 w-75 mx-auto">
               <h1 class="text-center text-feedback">GÓP Ý</h1>
-              <h7 class="text-center text-feedback mb-3">Chúng tôi luôn mong muốn nhận được sự góp ý từ phía khách hàng để cải thiện chất lượng dịch vụ của mình</h7>
+              <p class="text-center text-feedback mb-3">Chúng tôi luôn mong muốn nhận được sự góp ý từ phía khách hàng để cải thiện chất lượng dịch vụ của mình</p>
               <hr>
               <form class="d-flex flex-column gap-3 mt-4 mb-4">
               <div class="form-group">

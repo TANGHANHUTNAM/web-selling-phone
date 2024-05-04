@@ -6,6 +6,7 @@ import ProductDetailsPage from "../components/product/ProductDetails.vue";
 import LoginSignUpPage from "../views/LoginSignup.vue";
 import Register from "../components/loginsignup/SignUp.vue";
 import CartPage from "../views/Cart.vue";
+import ProductBrandPage from "../components/product/ProductBrand.vue"
 const client = [
     {
         path: "/",
@@ -28,9 +29,14 @@ const client = [
                 component: AllProductsPage,
             },
             {
-                path: "allproducts/:id",
+                path: "allproducts/product/:id",
                 name: "ProductsDetails",
                 component: ProductDetailsPage,
+            },
+            {
+                path: "allproducts/brand/:brand",
+                name: "ProductBrand",
+                component: ProductBrandPage,
             },
             {
                 path: "loginsignup",

@@ -1,120 +1,204 @@
 <template>
   <div>
-    <div class="navbar container-fluid">
-    <router-link class="text-decoration-none" :to="{ name: 'Home' }" @click.prevent="resetClick()">
-      <div class="nav-logo">
-      <img src="../assets/images/logo.png" alt="" />
-      <p class="name-storephone">SmartPhoneVN</p>
-    </div>
-    </router-link>
-    <ul class="nav-menu">
-      <li
-        v-for="navlink in navlinks"
-        :key="navlink.id"
-      >
-        <router-link class="nav-router-link" :to="{ name: navlink.name }" @Click.prevent="onClick(navlink.id)">{{
-          navlink.text
-        }}</router-link>
-        <!-- <hr /> -->
-      </li>
-    </ul>
-    <div class="nav-login-cart">
-      <router-link :to="{ name: 'LoginSignUp' }" @click.prevent="onClick(4)">
-        <button class="nav-login">Đăng nhập</button>
-      </router-link>
-      <router-link class="nav-router-link" :to="{ name: 'Cart' }" @click.prevent="onClick(5)">
-        <div class="nav-cart">
+    <nav
+      class="navbar navbar-expand-lg py-1 nav-bar-bg"
+      id="navbar-top"
+      data-navbar-soft-on-scroll="data-navbar-soft-on-scroll"
+    >
+      <div class="container">
+        <router-link :to="{name: 'Home'}" class="navbar-brand me-lg-auto cursor-pointer nav-logo">
+          <img
+            class="w-100 w-md-100 img-fluid logo-img"
+            src="../assets/images/logo.png"
+            alt="logo"
+          />
+          <p class="name-storephone">SmartPhoneVN</p>
+        </router-link>
+        <button
+          class="navbar-toggler border-0 "
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+        aria-label="Toggle navigation"
+        >
+          <i class="bi bi-list list-icon"></i>
+        </button>
+        <div
+          class="collapse navbar-collapse"
+          id="navbarSupportedContent"
+          data-navbar-collapse="data-navbar-collapse"
+        >
+          <div
+            class="container d-lg-flex justify-content-lg-around align-items-center pe-lg-0 w-lg-100"
+          >
+            <form
+              class="form-inline position-relative ms-lg-4 ms-xl-9 mt-3 mt-lg-0"
+              onsubmit="return false;"
+            >
+              <input
+                class="search fs-8 form-control form-input-search"
+                type="search"
+                name="search"
+                placeholder="Tìm..."
+              />
+              <div class="search-icon">
+                <span class="uil uil-search"></span>
+              </div>
+            </form>
+            <ul
+              class="navbar-nav mt-0 ms-lg-0 ms-xl-8 ms-2xl-9 gap-lg-x1 d-flex align-items-center justify-content-center w-100"
+              data-navbar-nav="data-navbar-nav"
+            >
+              <li class="nav-item mx-4">
+                <router-link :to="{name: 'Home'}" class="nav-link nav-bar-item px-0" title="home"
+                  >Trang chủ</router-link
+                >
+              </li>
+              <li class="nav-item mx-4">
+                <router-link :to="{name: 'Feedback'}" class="nav-link nav-bar-item px-0" title="home"
+                  >Góp ý</router-link
+                >
+              </li>
+              <li class="nav-item mx-4">
+                <router-link :to="{name: 'AllProducts'}" class="nav-link nav-bar-item px-0" title="home"
+                  >Sản phẩm</router-link
+                >
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+        <router-link :to="{name: 'Cart'}" class="nav-cart me-3">
           <div><i class="bi bi-cart"></i></div>
-          <div class="nav-cart-count">{{ cartCount }}</div>
-        </div>
-      </router-link>
-    </div>
-  </div>
-  <!-- HEADER -->
-  <header>
-      <div style="background-color: var(--second-blue)">
-        <div class="container py-3 ">
-          <nav class="d-flex">
-            <h6 class="mb-0">
-              <router-link :to="{name: 'Home'}" class="text-decoration-none text-white" @click.prevent="resetClick()">Trang chủ</router-link>
-              <span class="text-white-50 mx-2"> ></span>
-              <a href="" class="text-white text-decoration-none"></a>
-              <router-link :to="{name: `${navlinkRoute.name}`}" class="text-decoration-none text-white">{{ navlinkRoute.text }}</router-link>
-            </h6>
-          </nav>
-        </div>
+          <div class="nav-cart-count">{{ 0 }}</div>
+        </router-link>
+        <router-link :to="{name: 'LoginSignUp'}" class="nav-user d-flex flex-column justify-content-center align-items-center mx-3"> 
+          <div class="nav-user-icon"><i class="bi bi-person-circle"></i></div>
+          <div v-if="true" class="nav-user-name">Nhut Nam</div>
+        </router-link>
       </div>
-    </header>
-  <!-- HEADER -->
+    </nav>
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import { reactive, ref, onMounted} from "vue";
-export default {
-  setup() {
-    const navlinks = reactive([
-      {
-        id: 1,
-        text: "Trang chủ",
-        name: "Home",
-      },
-      {
-        id: 2,
-        text: "Phản hồi",
-        name: "Feedback",
-      },
-      {
-        id: 3,
-        text: "Sản phẩm",
-        name: "AllProducts",
-      },
-    ]);
-    const navlinkRoute = reactive({
-      name: "",
-      text: ""
-    });
-    function onClick(navlinkID) {
-      navlinks.forEach((navlink) => {
-        if (navlink.id === navlinkID) {
-          if(navlinkID === 1){
-            navlinkRoute.text= "";
-          } else {
-            navlinkRoute.text = navlink.text;
-            navlinkRoute.name = navlink.name;
-          }
-        } else if(navlinkID === 4){
-            navlinkRoute.name = "LoginSignUp"
-            navlinkRoute.text = "Đăng nhập";
-          } else if(navlinkID === 5){
-            navlinkRoute.name = "Cart"
-            navlinkRoute.text = "Giỏ hàng";
-          }
-      });
-      }
-    function resetClick(){
-      navlinkRoute.text = "";
-    }
+<script setup>
 
-
-    // Lấy số lượng sản phẩm trong giỏ hàng
-    const userID = ref("66337a4d25a1b036070f339f");
-    const cartCount = ref(0);
-    const getCountCart = async () => {
-      try {
-        const res = await axios.get(`http://localhost:8081/api/cartitem/user/${userID.value}`);
-        cartCount.value = res.data.length;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    onMounted(() => {
-      getCountCart();
-    });
-    return {
-      navlinks, onClick, navlinkRoute, resetClick, cartCount
-    };
-  },
-};
 </script>
+
+
+
+<style scoped>
+.nav-user {
+  text-decoration: none;
+  color: var(--primary-blue);
+}
+
+.nav-user:hover {
+  color: var(--primary-red);
+}
+ 
+.nav-user:focus {
+  color: var(--primary-red);
+
+}
+
+.list-icon {
+    color: var(--primary-blue);
+    font-size: 30px;
+}
+
+.nav-bar-item:focus {
+    color: var(--primary-red);
+}
+
+.nav-bar-item:hover {
+    color: var(--primary-red);
+}
+.name-storephone {
+    color: var(--primary-blue);
+    font-size: 0.5rem;
+}
+.form-input-search {
+    border-radius: 10px;
+    padding: 10px 20px;
+    border: 1px solid var(--primary-blue);
+    font-size: 0.9rem;
+    color: var(--primary-black);
+
+}
+.nav-user {
+    cursor: pointer;
+}
+.nav-bar-item {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--primary-blue);
+}
+
+.nav-user-icon {
+    font-size: 40px;
+}
+
+.nav-user-name {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.nav-bar-bg {
+    background: var(--primary-white);
+}
+
+.nav-cart{
+    display: flex;
+    align-items: center;
+    color: var(--primary-blue);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-cart:hover {
+  color: var(--primary-red);
+}
+
+.nav-cart:focus {
+  color: var(--primary-red);
+} 
+
+.nav-cart i{
+    font-size: 45px;
+}
+
+.nav-cart-count {
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -35px;
+    margin-left: -10px;
+    border-radius: 11px;
+    font-size: 12px;
+    background: var(--primary-red);
+    color: var(--primary-white);
+    cursor: pointer;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-logo img {
+    width: 80px;
+    height: 80px;
+}
+
+.nav-logo p {
+    font-size: 24px;
+    margin: 0 15px 0 0;
+
+}
+</style>

@@ -69,6 +69,67 @@
       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
         © 2024 Copyright: SmartphoneVN | Phát triển bởi smartphonevn
       </div>
+      <div @click="onClick()" class="back-to-top"><i class="bi bi-arrow-bar-up"></i></div>
     </footer>
   </div>
 </template>
+
+<script setup>
+function onClick() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+</script>
+
+
+<style scoped>
+.footer {
+  position: relative;
+}
+.back-to-top {
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  background-color: var(--primary-red);
+  color: var(--primary-white);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.back-to-top:hover {
+  background-color: var(--second-black);
+}
+
+@media (max-width: 575px) {
+  .footer {
+    position: relative;
+  }
+  .back-to-top {
+    position: fixed;
+    bottom: 40px;
+    right: 10px;
+    background-color: var(--primary-red);
+    color: var(--primary-white);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .back-to-top:hover {
+    background-color: var(--second-black);
+  }
+}
+</style>

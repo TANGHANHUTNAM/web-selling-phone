@@ -1,6 +1,11 @@
 <template>
   <div>
- 
+    <div class="container pt-3">
+      <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2 g-3">
+        <Brand v-for="brand in brands" :key="brand._id" :brand="brand"/>
+      </div>
+    </div>
+    
     <!-- ProductGrid -->
     <div class="container">
       <h1 class="my-4 text-uppercase">Tất cả sản phẩm</h1>
@@ -24,17 +29,20 @@
 import axios from "axios";
 import { ref } from "vue"
 import ProductGrid from "../components/product/ProductGrid.vue";
-
+import Brand from "../components/product/Brand.vue"
 export default {
-  components: {
-    ProductGrid
+  components: { 
+    ProductGrid, Brand
   },
   setup() {
     const products = ref(null);
     const currentPage = ref(1);
+    const brands = ref([]);
     const getProducts = async () => {
         const response = await axios.get(`http://localhost:8081/api/product?page=${currentPage.value}`);
+        const getBrands = await axios.get(`http://localhost:8081/api/brand`);
         products.value = response.data;
+        brands.value = getBrands.data;
     };
     function nextPage() {
       currentPage.value++;
@@ -48,7 +56,7 @@ export default {
     }
     getProducts();  
     return {
-      products, nextPage, prePage
+      products, brands, nextPage, prePage
     };
   },
 };
@@ -81,4 +89,16 @@ export default {
   width: 100px;
   text-align: center;
 }
+.page-link{
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+    transition: all 0.3s;
+    font-weight: 500;
+}
+.page-link:hover{
+    background-color: var(--primary-red);
+    color: var(--primary-white);
+    border: 1px solid var(--primary-red);
+}
+
 </style>

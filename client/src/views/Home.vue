@@ -4,7 +4,7 @@
       <Category />
       <div class="container my-5">
         <h2>SẢN PHẨM MỚI</h2>
-        <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 w-100 row-cols-2">
+        <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2">
         <NewProduct v-for="product in new_products" :key="product._id" :product="product"/>
         </div>
       </div>
@@ -64,5 +64,17 @@ getProducts();
   cursor: pointer;
   width: 100px;
   text-align: center;
+}
+.page-link{
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.page-link:hover{
+    background-color: var(--primary-red);
+    color: var(--primary-white);
+    border: 1px solid var(--primary-red);
 }
 </style>

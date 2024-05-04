@@ -1,6 +1,12 @@
 <template>
     <div>
-        This is the admin layout
+        <NavBar2/>
         <router-view></router-view>
     </div>
 </template>
+<script>
+export default {
+    components: {
+    }
+}
+</script>

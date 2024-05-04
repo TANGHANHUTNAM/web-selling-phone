@@ -15,6 +15,8 @@
             Đánh giá: {{ product.rating }}
             <i class="bi bi-star-fill product-item-rating"></i>
           </p>
+          <div v-if="product?.is_newProduct > 0" class="new_product">New</div>
+          <div v-else-if="product?.is_bestSeller > 0" class="bestseller_product">Hot</div>
         </div>
       <router-link
       class="text-decoration-none text-dark d-flex flex-column h-100"
@@ -68,6 +70,7 @@ export default {
 .product-item-card-des {
   font-weight: 500;
   height: 4rem;
+  font-size: clamp(0.75rem, 1.1vw, 1.1rem);
 }
 
 .product-item-card {
@@ -83,7 +86,8 @@ export default {
 .btn-add-cart{
   font-weight: 600;
   font-size: clamp(0.75rem, 1vw, 1.2rem);
-  border: none
+  border: none;
+  transition: all 0.5s;
 }
 
 .btn-add-cart:hover {
@@ -93,5 +97,37 @@ export default {
 
 .card-img-top:hover {
   transform: scale(1.02)
+}
+
+.bestseller_product {
+  position: absolute;
+  font-size: 0.8rem;
+  top: 0.3rem;
+  right: 0.3rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-red);
+  color: white;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.new_product {
+  position: absolute;
+  font-size: 0.8rem;
+  top: 0.3rem;
+  right: 0.3rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-red);
+  color: white;
+  padding: 0;
+  border-radius: 50%;
 }
 </style>

@@ -164,7 +164,6 @@ export default {
       gallery.value = resultGallery.data
       brand.value = resultProduct.data.brand
       itemInCart.value = resultItemInCart.data 
-      console.log(itemInCart.value)
     };
     
 

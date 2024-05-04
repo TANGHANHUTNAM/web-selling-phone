@@ -26,6 +26,18 @@ const addNewBrand = async (req, res) => {
     })
 }
 
+// Get brand by ID
+const getBrandByID = async (req, res) => {
+    const brandID = req.params.brandID;
+    await BrandModel.findById(brandID)
+    .then(data => {
+        res.status(200).json(data)
+    })
+    .catch(error => {
+        res.status(500).json(error)
+    })
+}
+
 module.exports = {
-    getAllBrand, addNewBrand
+    getAllBrand, addNewBrand, getBrandByID
 }

@@ -71,6 +71,7 @@ export default {
   font-weight: 500;
   min-height: 4rem;
   height: 4rem;
+  font-size: clamp(0.75rem, 1.2vw, 1.1rem);
 }
 
 .product-item-card {

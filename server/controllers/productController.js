@@ -38,15 +38,29 @@ const getAllProduct = async (req, res) => {
 }
 
 // GET PRODUCT BY BRAND
+const PAGE_SIZE_Brand = 10
 const getProductByBrand = async (req, res) => {
     const brand = req.params.brandID;
-    await ProductModel.find({brand: brand})
-    .then(data => {
-        res.status(200).json(data)
-    })
-    .catch(error => {
-        res.status(500).json(error)
-    })
+    var page = req.query.page;
+    if(page){
+        page = parseInt(page);
+        if(page <= 0) page = 1;
+        var elementsPass = (page -1)*PAGE_SIZE_Brand; // 20 phan tu tren 1 trang
+
+        await ProductModel.find({brand: brand}).skip(elementsPass).limit(PAGE_SIZE_Brand)
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
+    } else {
+        await ProductModel.find({brand: brand}).then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
+            res.status(500).json(error)
+        })
+    }
 }
 
 // 

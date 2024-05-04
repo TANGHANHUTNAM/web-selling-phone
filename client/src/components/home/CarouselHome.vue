@@ -5,44 +5,22 @@
         <main class="col-lg-9">
           <div class="container my-1">
             <div id="carouselExampleIndicators" class="carousel slide h-75">
-              <div class="carousel-indicators">
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide-to="0"
-                  class="active"
-                  aria-current="true"
-                  aria-label="Slide 1"
-                ></button>
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide-to="1"
-                  aria-label="Slide 2"
-                ></button>
-                <button
-                  type="button"
-                  data-bs-target="#carouselExampleIndicators"
-                  data-bs-slide-to="2"
-                  aria-label="Slide 3"
-                ></button>
-              </div>
               <div class="carousel-inner">
-                <div class="carousel-item active">
+                <div class="carousel-item active" data-bs-interval="2000">
                   <img
                     src="../../assets/images/carousel/3.jpg"
                     class="d-block w-100 rounded-4"
                     alt="..."
                   />
                 </div>
-                <div class="carousel-item">
+                <div class="carousel-item" data-bs-interval="2000">
                   <img
                     src="../../assets/images/carousel/2.jpg"
                     class="d-block w-100 rounded-4"
                     alt="..."
                   />
                 </div>
-                <div class="carousel-item">
+                <div class="carousel-item" data-bs-interval="2000">
                   <img
                     src="../../assets/images/carousel/1.jpg"
                     class="d-block w-100 rounded-4"
@@ -79,8 +57,8 @@
         </main>
         <aside class="col-lg-3">
           <div
-            class="card-banner h-100 rounded-4 w-100"
-            style="background-color: var(--primary-blue)"
+            class="card-banner h-100 rounded-4 w-100 banner-item"
+           
           >
             <!-- <div class="card-body text-center pb-5">
               <h5 class="pt-5 text-white">Amazing Gifts</h5>
@@ -95,3 +73,11 @@
     </div>
   </section>
 </template>
+
+<style scoped> 
+.banner-item{
+  background-image: url(../../assets/images/carousel/5.jpg);
+  background-size: cover;
+  background-position: center;
+}
+</style>

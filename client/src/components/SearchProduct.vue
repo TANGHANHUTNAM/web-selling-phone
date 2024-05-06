@@ -33,6 +33,8 @@ const products = computed(() => {
     return props.product.filter(product => product);
 });
 
+
+
 function formatPrice(value) {
 if (!value) {
     return '';

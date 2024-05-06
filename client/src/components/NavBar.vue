@@ -36,16 +36,17 @@
             <form
               class="form-inline ms-lg-4 ms-xl-9 mt-3 mt-lg-0 d-flex justify-content-center align-items-center"
               onsubmit="return false;"
-              @submit="searchProduct"
+              @submit="cartStore.searchProduct"
             >
               <input
                 class="search fs-8 form-control form-input-search"
                 type="search"
                 name="search"
                 placeholder="Tìm..."
-                v-model="search"
+                v-model="cartStore.search"
+            
               />
-              <button  class="search-icon ms-2" type="submit"><i class="bi bi-search"></i></button>
+              <button class="search-icon ms-2" type="submit"><i class="bi bi-search"></i></button>
             </form>
             <ul
               class="navbar-nav mt-0 ms-lg-0 ms-xl-8 ms-2xl-9 gap-lg-x1 d-flex align-items-center justify-content-center w-100"
@@ -71,7 +72,7 @@
           </div>
           <router-link :to="{name: 'Cart'}" class="nav-cart d-flex justify-content-center align-items-center">
           <div><i class="bi bi-cart"></i></div>
-          <div class="nav-cart-count">{{ countCart}}</div>
+          <div class="nav-cart-count">{{ cartStore.NumberItemCart }}</div>
         </router-link>
         <router-link :to="{name: 'LoginSignUp'}" class="nav-user d-flex flex-column justify-content-center align-items-center"> 
           <div class="nav-user-icon"><i class="bi bi-person-circle"></i></div>
@@ -80,8 +81,8 @@
         </div>
       </div>
     </nav>
-    <div v-if="data.length > 0" class="list-search-product form-select">
-        <SearchProduct :product="data" /> 
+    <div v-if="cartStore.data.length > 0" class="list-search-product form-select">
+        <SearchProduct :product="cartStore.data" /> 
     </div>
   </div>
 </template>
@@ -89,39 +90,22 @@
 <script setup>
 import { useCartStore } from './stores/Cart.js'
 import SearchProduct from './SearchProduct.vue'
-import axios from "axios";
-import { ref , computed, onMounted} from "vue";
+// import axios from "axios";
+import { onMounted, watch} from "vue";
 const cartStore = useCartStore();
+
 onMounted(() => {
   cartStore.getData();
-});
-const search = ref("");
-const userID = ref("66337a4d25a1b036070f339f")
-const data = ref([]);
-const ItemCarts = ref([])
-const getData = async () => {
-  if(search.value === '') {
-    data.value = [];
-  } else{
-    const res = await axios.get(`http://localhost:8081/api/product?des=${search.value}`);
-    data.value = res.data;
-  }
-  const resItemCart = await axios.get(`http://localhost:8081/api/cartitem/user/${userID.value}`);
-  ItemCarts.value = resItemCart.data
-};
-const searchProduct = () => {
-  getData()
-};
-
-
-
-const countCart = computed(() => {
-  return ItemCarts.value.length;
+  cartStore.getItemCart();
 });
 
+watch(() => cartStore.search, () => {
+  cartStore.searchProduct();
+});
 
 
 </script>
+
 
 <style scoped>
 

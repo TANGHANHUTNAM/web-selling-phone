@@ -13,8 +13,8 @@ import "bootstrap/dist/js/bootstrap.min.js"
 import router from "./router/index"
 const pinia = createPinia()
 const app = createApp(App);
+app.use(pinia);
 app.use(router);
 app.use(PrimeVue);
-app.use(pinia);
 app.mount('#app')
 

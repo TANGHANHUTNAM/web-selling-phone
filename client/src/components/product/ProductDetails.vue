@@ -72,11 +72,13 @@
               </h5>
 
               <div class="row">
-                <dt class="col-3">Màu</dt>
+                <dt class="col-3">Màu:</dt>
                 <dd class="col-9">{{ product.color }}</dd>
-                <dt class="col-3">Bộ nhớ</dt>
-                <dd class="col-9">{{ product.rom }} GB</dd>
-                <dt class="col-3">Hãng</dt>
+                <dt class="col-3">RAM:</dt>
+                <dd class="col-9">{{ product.ram }} <b>GB</b></dd>
+                <dt class="col-3">ROM:</dt>
+                <dd class="col-9">{{ product.rom }} <b>GB</b></dd>
+                <dt class="col-3">Hãng:</dt>
                 <dd class="col-9">{{ brand.name }}</dd>
               </div>
 
@@ -139,6 +141,7 @@
 </template>
 
 <script>
+import { useCartStore } from "../stores/Cart.js";
 import NotFound from "../../views/404Page.vue";
 import axios from "axios"
 import { useRoute } from "vue-router";
@@ -148,24 +151,22 @@ export default {
     "not-found": NotFound,
   },
   setup() {
-    // const userID = ref("66337a4d25a1b036070f339f")
     const route = useRoute();
     // Lấy tất cả sản phẩm
     const userID = ref("66337a4d25a1b036070f339f")
     const product = ref({});
     const gallery = ref([]);
     const brand = ref({});
-    const itemInCart = ref([]);
     const getProduct = async () => {
       const resultProduct = await axios.get(`http://localhost:8081/api/product/${route.params.id}`);
       const resultGallery = await axios.get(`http://localhost:8081/api/gallery/product/${route.params.id}`);
-      const resultItemInCart = await axios.get(`http://localhost:8081/api/cartitem/user/${userID.value}`);
+      // const resultItemInCart = await axios.get(`http://localhost:8081/api/cartitem/user/${userID.value}`);
       product.value = resultProduct.data;
       gallery.value = resultGallery.data
       brand.value = resultProduct.data.brand
-      itemInCart.value = resultItemInCart.data 
+      cartStore.getItemCart();
+      // ItemCarts.value = resultItemInCart.data 
     };
-    
 
     // Xem gallery
     function onToggleImage(gallery_link) {
@@ -174,7 +175,7 @@ export default {
     }
     
     // Thêm sản phẩm vào giỏ hàng
-    
+    const cartStore = useCartStore();
     const showSuccess = ref(false)
     const addToCart = async () => {
     axios.post(`http://localhost:8081/api/cartitem/user/${userID.value}`,{
@@ -182,8 +183,9 @@ export default {
       price: product.value.new_price,
     })
       showSuccess.value = true;
+      getProduct();
     };
-    
+  
     watch(
   () => route.params.id,
   async id => {
@@ -194,7 +196,7 @@ export default {
 )
     // Check sản phẩm trong giỏ hàng
     const ItemIsInCart = computed(() => {
-      return itemInCart.value.some((item) => item.productID._id === product.value._id);
+      return cartStore.ItemCarts.some((item) => item.productID._id === product.value._id);
     });
 
     // Định dạng giá sản phẩm
@@ -204,7 +206,9 @@ export default {
       }
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
-    onMounted(getProduct);
+    onMounted(() => {
+      getProduct();
+    });
     return {
       getProduct ,formatPrice, product, gallery, brand , onToggleImage, addToCart, showSuccess, ItemIsInCart
     };

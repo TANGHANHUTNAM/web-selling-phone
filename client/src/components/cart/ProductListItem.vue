@@ -21,7 +21,7 @@
         class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap"
       >
         <div class="">
-          <select style="width: 100px" class="form-select me-4" v-model="select_number">
+          <select @click.prevent="updateQuantity(item.productID._id)" style="width: 100px" class="form-select me-4" v-model="select_number">
             <option :value="number" v-for="number in item.productID.number" :key="number">{{number}}</option>
           </select>
         </div>
@@ -54,7 +54,8 @@
 </template>
 
 <script>
-// import axios from "axios";
+import { useCartStore } from "../stores/Cart.js";
+import axios from "axios";
 import { ref, computed} from "vue";
 export default {
   name: "ProductListItem",
@@ -62,13 +63,25 @@ export default {
     item: [Object, Array]
   },
   setup(props, context) {
+
+    // function updateCountCart(number){
+    //   cartStore.$state.countCart += number;
+    // }
+
+    const updateQuantity = async (productID) => {
+      await axios.put(`http://localhost:8081/api/cartitem/product/${productID}`, {
+        quantity: select_number.value
+      })
+      cartStore.getItemCart();
+    }
+
     const select_number = ref(props.item.quantity);
     const item = ref(props.item);
 
     const totalPriceItem = computed(() => {
       return item.value.price * select_number.value;
     });
-    
+    const cartStore = useCartStore();
     // Xóa sản phẩm khỏi giỏ hàng
     const removeItem = async (productID) => {
         context.emit('remove-item-from-cart', productID);
@@ -83,7 +96,7 @@ export default {
     }
 
     return {
-      formatPrice, select_number, totalPriceItem, removeItem
+      formatPrice, select_number, totalPriceItem, removeItem, updateQuantity
     };
     
   },

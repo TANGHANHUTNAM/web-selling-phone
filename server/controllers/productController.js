@@ -16,6 +16,7 @@ const getProductByID = async (req, res) => {
 const PAGE_SIZE = 20
 const getAllProduct = async (req, res) => {
     var page = req.query.page;
+    var des = req.query.des;
     if(page){
         page = parseInt(page);
         if(page <= 0) page = 1;
@@ -26,6 +27,13 @@ const getAllProduct = async (req, res) => {
             res.status(200).json(data)
         })
         .catch(error => {
+            res.status(500).json(error)
+        })
+    } else if(des) {
+        await ProductModel.find({ des: { $regex: des, $options: 'i' } })
+        .then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
             res.status(500).json(error)
         })
     } else {

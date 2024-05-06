@@ -24,15 +24,19 @@ const route = useRoute();
 const products = ref([]);
 const brand = ref({});
 const currentPage = ref(1);
+const maxPage = ref(0);
 const getProducts = async () => {
     const response = await axios.get(`http://localhost:8081/api/product/brand/${route.params.brand}?page=${currentPage.value}`);
     const responseBrand = await axios.get(`http://localhost:8081/api/brand/${route.params.brand}`);
     products.value = response.data;
     brand.value = responseBrand.data;
+    maxPage.value = Math.ceil(response.data.length/10);
 };
-function nextPage() {
-      currentPage.value++;
+function nextPage(){
+    if(currentPage.value <= maxPage.value){
+        currentPage.value++;
       getProducts();
+    }
     }
 function prePage() {
     if (currentPage.value > 1) {

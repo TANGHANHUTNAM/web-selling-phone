@@ -61,7 +61,7 @@
                 <span class="h5 product-new-price">{{ formatPrice(product.new_price) }}đ</span>
                 <span class="text-muted">/sản phẩm</span>
                 <p>
-                  <span class="product-details-old-price">
+                  <span v-if="Number(product.old_price) > 0" class="product-details-old-price">
                     {{formatPrice(product.old_price)}}đ</span
                   >
                 </p>
@@ -142,7 +142,7 @@
 import NotFound from "../../views/404Page.vue";
 import axios from "axios"
 import { useRoute } from "vue-router";
-import { ref, computed, onMounted} from "vue";
+import { ref, computed, onMounted, watch} from "vue";
 export default {
   components: {
     "not-found": NotFound,
@@ -181,12 +181,17 @@ export default {
       productID: product.value._id,
       price: product.value.new_price,
     })
-    .then((res) => {
-      console.log(res.data)
-    });
       showSuccess.value = true;
     };
-
+    
+    watch(
+  () => route.params.id,
+  async id => {
+    product.value = await axios.get(`http://localhost:8081/api/product/${id}`);
+    getProduct();
+    showSuccess.value = false;
+  }
+)
     // Check sản phẩm trong giỏ hàng
     const ItemIsInCart = computed(() => {
       return itemInCart.value.some((item) => item.productID._id === product.value._id);
@@ -199,7 +204,6 @@ export default {
       }
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
-    console.log(ItemIsInCart.value)
     onMounted(getProduct);
     return {
       getProduct ,formatPrice, product, gallery, brand , onToggleImage, addToCart, showSuccess, ItemIsInCart

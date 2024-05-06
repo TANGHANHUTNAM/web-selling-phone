@@ -47,6 +47,10 @@ const productSchema = new Schema(
       required: true,
       default: 1,
     },
+    ram: {
+      type: String,
+      required: true,
+    },
     rom: {
       type: String,
       required: true,

@@ -15,3 +15,11 @@
     </div>
   </section>
 </template>
+
+<style scoped>
+.home-banner {
+  background-color: var(--second-orange);
+  border-radius: 10px;
+  overflow: hidden;
+}
+</style>

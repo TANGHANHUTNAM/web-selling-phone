@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="position-relative">
     <nav
       class="navbar navbar-expand-lg py-1 nav-bar-bg"
       id="navbar-top"
@@ -31,65 +31,120 @@
           data-navbar-collapse="data-navbar-collapse"
         >
           <div
-            class="container d-lg-flex justify-content-lg-around align-items-center pe-lg-0 w-lg-100"
+            class="container d-lg-flex justify-content-lg-around align-items-center pe-lg-0 w-lg-100 position-relative"
           >
             <form
-              class="form-inline position-relative ms-lg-4 ms-xl-9 mt-3 mt-lg-0"
+              class="form-inline ms-lg-4 ms-xl-9 mt-3 mt-lg-0 d-flex justify-content-center align-items-center"
               onsubmit="return false;"
+              @submit="searchProduct"
             >
               <input
                 class="search fs-8 form-control form-input-search"
                 type="search"
                 name="search"
                 placeholder="Tìm..."
+                v-model="search"
               />
-              <div class="search-icon">
-                <span class="uil uil-search"></span>
-              </div>
+              <button  class="search-icon ms-2" type="submit"><i class="bi bi-search"></i></button>
             </form>
             <ul
               class="navbar-nav mt-0 ms-lg-0 ms-xl-8 ms-2xl-9 gap-lg-x1 d-flex align-items-center justify-content-center w-100"
               data-navbar-nav="data-navbar-nav"
             >
               <li class="nav-item mx-4">
-                <router-link :to="{name: 'Home'}" class="nav-link nav-bar-item px-0" title="home"
+                <router-link :to="{name: 'Home'}" class="nav-link nav-bar-item px-0" title="Trang chủ"
                   >Trang chủ</router-link
                 >
               </li>
               <li class="nav-item mx-4">
-                <router-link :to="{name: 'Feedback'}" class="nav-link nav-bar-item px-0" title="home"
+                <router-link :to="{name: 'Feedback'}" class="nav-link nav-bar-item px-0" title="Góp ý"
                   >Góp ý</router-link
                 >
               </li>
               <li class="nav-item mx-4">
-                <router-link :to="{name: 'AllProducts'}" class="nav-link nav-bar-item px-0" title="home"
+                <router-link :to="{name: 'AllProducts'}" class="nav-link nav-bar-item px-0" title="Sản phẩm"
                   >Sản phẩm</router-link
                 >
               </li>
               
             </ul>
           </div>
-        </div>
-        <router-link :to="{name: 'Cart'}" class="nav-cart me-3">
+          <router-link :to="{name: 'Cart'}" class="nav-cart d-flex justify-content-center align-items-center">
           <div><i class="bi bi-cart"></i></div>
-          <div class="nav-cart-count">{{ 0 }}</div>
+          <div class="nav-cart-count">{{ countCart}}</div>
         </router-link>
-        <router-link :to="{name: 'LoginSignUp'}" class="nav-user d-flex flex-column justify-content-center align-items-center mx-3"> 
+        <router-link :to="{name: 'LoginSignUp'}" class="nav-user d-flex flex-column justify-content-center align-items-center"> 
           <div class="nav-user-icon"><i class="bi bi-person-circle"></i></div>
           <div v-if="true" class="nav-user-name">Nhut Nam</div>
         </router-link>
+        </div>
       </div>
     </nav>
+    <div v-if="data.length > 0" class="list-search-product form-select">
+        <SearchProduct :product="data" /> 
+    </div>
   </div>
 </template>
 
 <script setup>
+import { useCartStore } from './stores/Cart.js'
+import SearchProduct from './SearchProduct.vue'
+import axios from "axios";
+import { ref , computed, onMounted} from "vue";
+const cartStore = useCartStore();
+onMounted(() => {
+  cartStore.getData();
+});
+const search = ref("");
+const userID = ref("66337a4d25a1b036070f339f")
+const data = ref([]);
+const ItemCarts = ref([])
+const getData = async () => {
+  if(search.value === '') {
+    data.value = [];
+  } else{
+    const res = await axios.get(`http://localhost:8081/api/product?des=${search.value}`);
+    data.value = res.data;
+  }
+  const resItemCart = await axios.get(`http://localhost:8081/api/cartitem/user/${userID.value}`);
+  ItemCarts.value = resItemCart.data
+};
+const searchProduct = () => {
+  getData()
+};
+
+
+
+const countCart = computed(() => {
+  return ItemCarts.value.length;
+});
+
+
 
 </script>
 
-
-
 <style scoped>
+
+.form-input-search {
+    max-width: 400px;
+    padding: 10px 20px;
+    border: 1px solid var(--primary-blue);
+    font-size: 1rem;
+    color: var(--primary-black);
+    border-radius: 1rem;
+}
+.search-icon {
+    font-size: 1.5rem;
+    color: var(--primary-blue);
+    border: none;
+    background: var(--primary-white);
+}
+.search-icon:hover {
+  color: var(--primary-red);
+}
+.nav-user-name {
+  text-align: center;
+}
 .nav-user {
   text-decoration: none;
   color: var(--primary-blue);
@@ -120,19 +175,12 @@
     color: var(--primary-blue);
     font-size: 0.5rem;
 }
-.form-input-search {
-    border-radius: 10px;
-    padding: 10px 20px;
-    border: 1px solid var(--primary-blue);
-    font-size: 0.9rem;
-    color: var(--primary-black);
 
-}
 .nav-user {
     cursor: pointer;
 }
 .nav-bar-item {
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 1.3vw, 1.4rem);
     font-weight: 500;
     color: var(--primary-blue);
 }
@@ -142,8 +190,9 @@
 }
 
 .nav-user-name {
-    font-size: 15px;
+    font-size: clamp(0.6rem, 0.8vw, 0.8rem);
     font-weight: 500;
+    min-width: 100px;
 }
 
 .nav-bar-bg {

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-view></router-view>
     <div class="container pt-3">
       <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2 g-3">
         <Brand v-for="brand in brands" :key="brand._id" :brand="brand"/>
@@ -37,16 +38,21 @@ export default {
   setup() {
     const products = ref(null);
     const currentPage = ref(1);
+    const maxPage = ref(0);
     const brands = ref([]);
     const getProducts = async () => {
         const response = await axios.get(`http://localhost:8081/api/product?page=${currentPage.value}`);
         const getBrands = await axios.get(`http://localhost:8081/api/brand`);
         products.value = response.data;
         brands.value = getBrands.data;
+        maxPage.value = Math.ceil(response.data.length/20);
+        
     };
     function nextPage() {
-      currentPage.value++;
-      getProducts();
+      if(currentPage.value <= maxPage.value){
+        currentPage.value++;
+        getProducts()
+      }
     }
     function prePage() {
       if (currentPage.value > 1) {

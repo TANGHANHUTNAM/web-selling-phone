@@ -1,7 +1,6 @@
 <template>
   <div>
       <Carousel />
-      <Category />
       <div class="container my-5">
         <h2>SẢN PHẨM MỚI</h2>
         <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2">
@@ -11,7 +10,7 @@
       <Banner />
       <div class="container my-5">
         <h2>SẢN PHẨM BÁN CHẠY</h2>
-        <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 w-100 row-cols-2">
+        <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2">
         <NewProduct v-for="product in bestseller_products" :key="product._id" :product="product"/>
         </div>
         <div class="container d-flex justify-content-end mt-4">
@@ -28,7 +27,6 @@
 
 <script setup>
 import Carousel from "../components/home/CarouselHome.vue";
-import Category from "../components/home/CategoryHome.vue";
 import NewProduct from "../components/home/NewProductHome.vue";
 import Banner from "../components/home/BannerHome.vue";
 import {ref} from "vue";
@@ -41,12 +39,15 @@ const getProducts = async () => {
   const response2 = await axios.get(`http://localhost:8081/api/product/products/bestseller?page=${currentPage.value}`);
   new_products.value = response.data;
   bestseller_products.value = response2.data;
+  maxPage.value = Math.ceil(response2.data.length/5);
 }
-
+const maxPage = ref(1);
 const currentPage = ref(1);
 function nextPage() {
-      currentPage.value++;
+    if (currentPage.value <= maxPage.value){
+       currentPage.value++;
       getProducts();
+    }
     }
     function prePage() {
       if (currentPage.value > 1) {

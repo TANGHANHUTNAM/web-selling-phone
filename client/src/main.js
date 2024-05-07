@@ -10,6 +10,22 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-icons/font/bootstrap-icons.css"
 import "./assets/styles/index.css"
 import "bootstrap/dist/js/bootstrap.min.js"
+import Swal from "sweetalert2";
+
+window.Swal = Swal;
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 1500,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
+
+window.Toast = Toast;
 // import router
 import router from "./router/index"
 const pinia = createPinia()

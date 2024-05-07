@@ -8,7 +8,7 @@
         </div>
       </div>
       <Banner />
-      <div class="container my-5">
+      <div class="container mt-5 mb-2">
         <h2>SẢN PHẨM BÁN CHẠY</h2>
         <div class="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2">
         <NewProduct v-for="product in bestseller_products" :key="product._id" :product="product"/>
@@ -22,10 +22,12 @@
           </nav>
         </div>
       </div>
+      <FeedBackList />
   </div>
 </template>
 
 <script setup>
+import FeedBackList from "../components/home/FeedbackList.vue";
 import Carousel from "../components/home/CarouselHome.vue";
 import NewProduct from "../components/home/NewProductHome.vue";
 import Banner from "../components/home/BannerHome.vue";

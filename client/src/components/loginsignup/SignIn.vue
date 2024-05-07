@@ -103,14 +103,12 @@ export default {
     }
 
     const userStore = useUserStore();
-    console.log(validate());
     function onSubmit() {
-      if (this.validate()== true){
+      if (this.validate() == true){
         userStore.userLogin = user;
         userStore.login();
-        userStore.getUserInformation();
-        this.user.password= "";
-        this.user.email= "";
+          this.user.password= "";
+          this.user.email= "";
       }
     }
     return { onSubmit, user, validate, error };

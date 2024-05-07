@@ -146,7 +146,7 @@ import NotFound from "../../views/404Page.vue";
 import axios from "axios"
 import { useRoute } from "vue-router";
 import { ref, computed, onMounted, watch} from "vue";
-import { useUserStore } from "../stores/User";
+// import { useUserStore } from "../stores/User";
 export default {
   components: {
     "not-found": NotFound,
@@ -154,8 +154,8 @@ export default {
   setup() {
     const route = useRoute();
     // Lấy tất cả sản phẩm
-    const userStore = useUserStore();
-    const userID = userStore.userID;
+    // const userStore = useUserStore();
+    const userID = ref(localStorage.getItem('userID'));
     const product = ref({});
     const gallery = ref([]);
     const brand = ref({});
@@ -178,6 +178,7 @@ export default {
     const cartStore = useCartStore();
     const showSuccess = ref(false)
     const addToCart = async () => {
+    if(userID.value === null) return alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
     axios.post(`http://localhost:8081/api/cartitem/user/${userID.value}`,{
       productID: product.value._id,
       price: product.value.new_price,

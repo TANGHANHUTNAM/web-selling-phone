@@ -58,6 +58,34 @@ const addFeedback = async (req, res) => {
     }
 }
 
+// GET ALL FEEDBACKS APPROVED
+const PAGE_SIZE_APPROVED = 4
+const getAllFeedbacksApproved = async (req, res) => {
+    var page = req.query.page;
+    if(page){
+        page = parseInt(page);
+        if(page <= 0) page = 1;
+        var elementsPass = (page -1)*PAGE_SIZE_APPROVED; // 4 phan tu tren 1 trang
+
+        await FeedBackModel.find({approved: 1}).skip(elementsPass).limit(PAGE_SIZE_APPROVED).sort({createdAt: -1})
+        .populate('userID')
+        .then(data => {
+            res.json(data)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
+    } else {
+        await FeedBackModel.find({approved: 1})
+        .populate('userID')
+        .then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
+            res.status(500).json(error)
+        })
+    }
+}
+
 module.exports = {
-    getFeedbacks, getAllFeedbacks, addFeedback
+    getFeedbacks, getAllFeedbacks, addFeedback,getAllFeedbacksApproved
 }

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import {watch} from 'vue'
 export const useCartStore = defineStore('cart', {
   state: () => ({
     search: '',
@@ -67,6 +68,14 @@ export const useCartStore = defineStore('cart', {
           price: item.price,
         })
       })
+    },
+    watchUserID() {
+      watch(
+        () => this.userID,
+        () => {
+          this.getItemCart();
+        }
+      );
     },
     searchProduct(){
       this.getData();

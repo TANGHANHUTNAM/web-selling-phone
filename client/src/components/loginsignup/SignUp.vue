@@ -174,10 +174,12 @@ export default {
     const router= useRouter();
     const userStore = useUserStore();
     function onSubmit() {
-      if (this.validate() == true) {
+      if (this.validate()) {
         userStore.user = user;
         userStore.register();
         router.push({ name: "LoginSignUp" });
+      } else {
+        alert("Vui lòng điền thông tin!");
       }
     }
     

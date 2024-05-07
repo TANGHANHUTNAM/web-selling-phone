@@ -1,11 +1,14 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import Toast from "sweetalert2";
 export const useUserStore = defineStore("user", {
   state: () => ({
     user: [],
     userLogin: [],
     userID: localStorage.getItem("userID"),
     userInformation: [],
+    success: false,
+    feedback: [],
   }),
   getters: {},
   actions: {
@@ -14,7 +17,10 @@ export const useUserStore = defineStore("user", {
         `http://localhost:8081/api/user/email/emailUser?email=${this.user.email}&phoneNumber=${this.user.phoneNumber}`
       );
       if (userExist.data) {
-        alert("Email hoặc số điện thoại đã tồn tại!");
+        Toast.fire({
+            icon: "error",
+            title: "Email hoặc số điện thoại đã tồn tại!",
+          });
       } else {
         await axios
           .post(`http://localhost:8081/api/user/register`, {
@@ -25,8 +31,11 @@ export const useUserStore = defineStore("user", {
             password: this.user.password,
           })
           .then((data) => {
-             localStorage.setItem("userRegister", JSON.stringify(data.data));
-            alert("Đăng ký thành công!");
+            localStorage.setItem("userRegister", JSON.stringify(data.data));
+            Toast.fire({
+            icon: "success",
+            title: "Đăng nhập thành công!",
+          });
           })
           .catch((error) => {
             console.log(error);
@@ -44,12 +53,18 @@ export const useUserStore = defineStore("user", {
         );
         if (getUser.data) {
           this.userID = getUser.data._id;
-          console.log(this.userID);
           localStorage.setItem("userID", this.userID);
-          alert("Đăng nhập thành công!");
+          this.getUserInformation();
+          Toast.fire({
+            icon: "success",
+            title: "Đăng nhập thành công!",
+          });
         }
       } catch (error) {
-        alert("Email hoặc mật khẩu không đúng!");
+        Toast.fire({
+            icon: "error",
+            title: "Thông tin không chính xác",
+          });
       }
     },
 
@@ -58,6 +73,44 @@ export const useUserStore = defineStore("user", {
         `http://localhost:8081/api/user/${this.userID}`
       );
       this.userInformation = getUser.data;
+      localStorage.setItem(
+        "userInformation",
+        JSON.stringify(this.userInformation)
+      );
+      setTimeout(() => {
+    window.location.href = "/";
+  }, 2000);
+    },
+
+    removeLocalStorage() {
+      localStorage.removeItem("userID");
+      localStorage.removeItem("userInformation");
+      localStorage.removeItem("userRegister");
+      window.location.href = "/loginsignup";
+    },
+
+    async feedbackUser() {
+      if(this.userID === null) {
+        Toast.fire({
+            icon: "error",
+            title: "Vui lòng đăng nhập để gửi phản hồi!",
+          });
+        return;
+      }
+      await axios
+        .post(`http://localhost:8081/api/feedback/${this.userID}`, {
+           subject: this.feedback.subject,
+            content: this.feedback.content
+        })
+        .then(() => {
+          Toast.fire({
+            icon: "success",
+            title: "Gửi phản hồi thành công!",
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   },
 });

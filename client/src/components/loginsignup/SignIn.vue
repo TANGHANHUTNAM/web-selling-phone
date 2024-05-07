@@ -57,6 +57,7 @@
   </div>
 </template>
 <script>
+import { useUserStore } from "../stores/User";
 import { reactive } from "vue";
 export default {
   setup() {
@@ -101,8 +102,16 @@ export default {
       return true;
     }
 
+    const userStore = useUserStore();
+    console.log(validate());
     function onSubmit() {
-      if (this.validate()) console.log(user);
+      if (this.validate()== true){
+        userStore.userLogin = user;
+        userStore.login();
+        userStore.getUserInformation();
+        this.user.password= "";
+        this.user.email= "";
+      }
     }
     return { onSubmit, user, validate, error };
   },

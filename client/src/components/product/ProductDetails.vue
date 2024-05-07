@@ -116,17 +116,17 @@
                   >
                     <i class=" me-1 fa fa-shopping-basket"></i> Thêm vào giỏ hàng 
                   </div>  
-                  <div
+                  <!-- <div
                     v-if="showSuccess && !ItemIsInCart"
                     class="btn-add-cart-success btn btn-primary shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
                   >
                     <i class=" me-1 fa fa-shopping-basket"></i> Đã thêm sản phẩm vào giỏ hàng!
-                  </div>
+                  </div> -->
                   <div
                     v-if="ItemIsInCart"
                     class="btn btn-cart-is-in-cart shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
                   >
-                    <i class="me-1 fa fa-shopping-basket"></i> Sản phẩm đã tồn tại trong giỏ hàng!
+                    <i class="me-1 fa fa-shopping-basket"></i> Sản phẩm đã thêm vào giỏ hàng
                   </div>
                 </div>
               </div>
@@ -146,6 +146,7 @@ import NotFound from "../../views/404Page.vue";
 import axios from "axios"
 import { useRoute } from "vue-router";
 import { ref, computed, onMounted, watch} from "vue";
+import { useUserStore } from "../stores/User";
 export default {
   components: {
     "not-found": NotFound,
@@ -153,19 +154,18 @@ export default {
   setup() {
     const route = useRoute();
     // Lấy tất cả sản phẩm
-    const userID = ref("66337a4d25a1b036070f339f")
+    const userStore = useUserStore();
+    const userID = userStore.userID;
     const product = ref({});
     const gallery = ref([]);
     const brand = ref({});
     const getProduct = async () => {
       const resultProduct = await axios.get(`http://localhost:8081/api/product/${route.params.id}`);
       const resultGallery = await axios.get(`http://localhost:8081/api/gallery/product/${route.params.id}`);
-      // const resultItemInCart = await axios.get(`http://localhost:8081/api/cartitem/user/${userID.value}`);
       product.value = resultProduct.data;
       gallery.value = resultGallery.data
       brand.value = resultProduct.data.brand
       cartStore.getItemCart();
-      // ItemCarts.value = resultItemInCart.data 
     };
 
     // Xem gallery

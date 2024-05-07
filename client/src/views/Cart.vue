@@ -63,7 +63,7 @@
                   </div>
 
                   <div class="mt-3">
-                    <div @click="payment" class="btn btn-success w-100 shadow-0 mb-2">
+                    <div @click="payment" class="btn btn-success w-100 shadow-0">
                       Thanh toán
                     </div>
                     <router-link :to="{name: 'AllProducts'}" class="btn btn-primary w-100 border mt-2">
@@ -76,14 +76,17 @@
             <!-- summary -->
           </div>
         </div>
+        <Order :orders="orderStore.allOrder"/>
       </section>
     </div>
-
+   
   </div>
 </template>
 
 <script setup>
+import Order from "../components/cart/Order.vue";
 import {useCartStore} from "../components/stores/Cart.js";
+import {useOrderStore} from "../components/stores/Order.js";
 import axios from "axios"
 import ProductList from "../components/cart/ProductList.vue";
 import { onMounted } from "vue";
@@ -99,7 +102,6 @@ import { onMounted } from "vue";
       if(response.status === 200) {
         cartStore.getItemCart();
       }
-      
     }
 
     // Định dạng giá
@@ -109,5 +111,27 @@ import { onMounted } from "vue";
       }
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
-
+    const orderStore = useOrderStore();
+    const payment = () => {
+      if(cartStore.userID === '') {
+        alert("Vui lòng đăng nhập để thanh toán");
+        return;
+      }
+      if(cartStore.ItemCarts.length === 0) {
+        alert("Giỏ hàng của bạn đang trống");
+        return;
+      }
+      const result = confirm("Bạn có muốn thanh toán đơn hàng này?")
+      if(result == true){
+        cartStore.order();
+        orderStore.ItemCarts = cartStore.ItemCarts;
+        orderStore.orderSuccess = true;
+        cartStore.removeAllItemFromCart(); 
+        alert("Đơn hàng đã thanh toán thành công với số tiền: " + formatPrice(cartStore.TotalPrice) + "đ");
+        window.location.reload();
+      } else {
+        alert("Đã hủy thanh toán");
+      } 
+    }
+    orderStore.getOrder();
 </script>

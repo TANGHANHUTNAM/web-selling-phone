@@ -1,14 +1,9 @@
 const OrderModel = require("../models/orderModel");
-
 // ADD NEW ORDER
 const addOrder = async (req, res) => {
     const userID = req.params.userID;
     const paymentID = req.params.paymentID;
-    const note = req.body.note;
-    const total_price = req.body.total_price;
-    const total_quantity = req.body.total_quantity;
-    const total_discount = req.body.total_discount;
-    const price_after_discount = req.body.price_after_discount;
+    const {note, total_price, total_quantity, total_discount, price_after_discount} = req.body;
     await OrderModel.create({
         userID: userID,
         paymentID: paymentID,
@@ -18,7 +13,7 @@ const addOrder = async (req, res) => {
         total_discount: total_discount,
         price_after_discount: price_after_discount
     }).then(data => {
-        res.status(200).json("Đã thêm đơn hàng mới", data)
+        res.status(200).json(data)
     }).catch(error => {
         res.status(500).json(error)
     })
@@ -87,6 +82,19 @@ const updateOrderStatus = async (req, res) => {
     })
 }
 
+const getOrder = async (req, res) => {
+    const userID = req.params.userID;
+    // const orders = await OrderModel.find({userID: userID}).sort({order_date: -1}).limit(1)
+    // .populate("userID")
+    await OrderModel.find({userID: userID})
+    .then(data => {
+        res.status(200).json(data)
+    }).catch(error => {
+        res.status(500).json(error)
+    })
+    
+}
+
 module.exports= {
-   getOrderPendingByUserID , getOrderApprovedByUserID, updateOrderStatus , addOrder, getOrderApproved, getOrderPending
+   getOrder ,getOrderPendingByUserID , getOrderApprovedByUserID, updateOrderStatus , addOrder, getOrderApproved, getOrderPending
 }

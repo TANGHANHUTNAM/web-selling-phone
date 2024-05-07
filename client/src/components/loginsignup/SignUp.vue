@@ -99,6 +99,8 @@
   </div>
 </template>
 <script>
+import { useUserStore } from "../stores/User";
+import { useRouter } from "vue-router";
 import { reactive } from "vue";
 export default {
   setup() {
@@ -169,11 +171,16 @@ export default {
       );
     }
 
+    const router= useRouter();
+    const userStore = useUserStore();
     function onSubmit() {
-      if (this.validate()) {
-        console.log(user);
+      if (this.validate() == true) {
+        userStore.user = user;
+        userStore.register();
+        router.push({ name: "LoginSignUp" });
       }
     }
+    
     return { onSubmit, user, error, validate };
   },
 };

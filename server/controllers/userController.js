@@ -69,44 +69,46 @@ const registerUser = async (req, res) => {
     var address = req.body.address;
     var email = req.body.email;
     var password = req.body.password;
-    await UserModel.findOne({email: email}).then(data => {
-        if(data){
-            res.status(401).json({message: "Email đã tồn tại!"});
-        } else {
-            return UserModel.create({
+    await UserModel.create({
             fullName: fullName,
             phoneNumber: phoneNumber,
             address: address,
             email: email,
             password: password,
-            isAdmin: false
-        })
-        }
+            isAdmin: false,
     }).then(data => {
-        res.status(201).json({message: "Đăng ký thành công!", data});
-    }).catch(error => 
-        {res.status(500).json("Đăng ký thất bại!"), error})
+        res.status(200).json({message: "Đăng ký thành công!", data})
+    }).catch(error => {
+        res.status(500).json(error)})
 }
 
 // LOGIN 
 const loginUser = async (req, res) => {
-    try {
-        const user = await UserModel.findOne({email: req.body.email});
-        if(!user){
-            res.status(401).json({message: "Thông tin không chính xác"});
-        } else {
-            if(user.password !== req.body.password){
-                res.status(401).json({message: "Mật khẩu không chính xác!"});
-            }
-            res.status(200).json({message: "Đăng nhập thành công!"});
-        }
-    } catch (error) {
-        res.status(500).json(error)
+    var email = req.body.email;
+    var password = req.body.password;
+    const user = await UserModel.findOne({email: email, password: password})
+    if(user){
+        res.status(200).json(user)
+    } else {
+        res.status(500).json({message: "Email hoặc mật khẩu không đúng!"})
     }
-}
+    }
 
-
+// 
+const getUserByEmail = async (req, res) => {
+  const email = req.query.email;
+  const phoneNumber = req.query.phoneNumber;
+  await UserModel.findOne({
+    $or: [{ email: email }, { phoneNumber: phoneNumber }]
+  })
+    .then(data => {
+      res.status(200).json(data);
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
+};
 
 module.exports = {
-    registerUser, loginUser, getAllUsers, updateUser, deleteUser, getUserByID
+  getUserByEmail,  registerUser, loginUser, getAllUsers, updateUser, deleteUser, getUserByID
 }

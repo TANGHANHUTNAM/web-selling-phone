@@ -70,7 +70,19 @@ const updateItemByProductID = async (req, res) => {
     })
 }
 
+// Delete all cart items by user ID
+const deleteAllCartItemByUserID = async (req, res) => {
+    var userID = req.params.userID;
+    await CartItemModel.deleteMany({userID: userID})
+    .then(data => {
+        res.status(200).json(data)
+    })
+    .catch(error => {
+        res.status(500).json(error)
+    })
+
+}
 
 module.exports = {
-   updateItemByProductID,  getAllCartItemByUserID, addNewCartItem, deleteItemByProductID, getItemByProductID
+  deleteAllCartItemByUserID ,updateItemByProductID,  getAllCartItemByUserID, addNewCartItem, deleteItemByProductID, getItemByProductID
 }

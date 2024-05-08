@@ -141,6 +141,59 @@ const getAllBestsellerProduct = async (req, res) => {
     }
 }
 
+// getAllOutOfStockProduct
+const PAGE_SIZE_OutOfStockProduct = 9
+const getAllOutOfStockProduct = async (req, res) => {
+    var page = req.query.page;
+    if(page){
+        page = parseInt(page);
+        if(page <= 0) page = 1;
+        var elementsPass = (page -1)*PAGE_SIZE_OutOfStockProduct;
+        await ProductModel.find({number: 0}).skip(elementsPass).limit(PAGE_SIZE_OutOfStockProduct).sort({createdAt: -1})
+        .populate('brand')
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
+    } else {
+        await ProductModel.find({number: 0})
+        .populate('brand')
+        .then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
+            res.status(500).json(error)
+        })
+    }
+}
+
+const updateProduct = async (req, res) => {
+    const productID = req.params.productID;
+    const {title, brand, thumbnail, number, ram, rom, new_price, old_price, is_newProduct, is_bestSeller, des, rating, color} = req.body;
+    await ProductModel.updateOne({_id: productID}, {
+        title: title,
+        brand: brand,
+        thumbnail: thumbnail,
+        number: number,
+        ram: ram,
+        rom: rom,
+        new_price: new_price,
+        old_price: old_price,
+        is_newProduct: is_newProduct,
+        is_bestSeller: is_bestSeller,
+        des: des,
+        rating: rating,
+        color: color
+    })
+    .then(data => {
+        res.status(200).json(data)
+    })
+    .catch(error => {
+        res.status(500).json(error)
+    })
+}
+
 module.exports = {
-    getAllProduct, getProductByID, getProductByBrand, addNewProduct, getAllNewProduct, getAllBestsellerProduct
+   updateProduct ,getAllOutOfStockProduct,  getAllProduct, getProductByID, getProductByBrand, addNewProduct, getAllNewProduct, getAllBestsellerProduct
 }

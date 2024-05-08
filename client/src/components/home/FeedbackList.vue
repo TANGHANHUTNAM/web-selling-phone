@@ -9,7 +9,7 @@
           class="col g-3"
         >
           <div
-            class="card card-item p-2 w-100 h-100 rounded-4 d-flex flex-column"
+            class="card card-item p-2 w-100 h-100 rounded-4 d-flex flex-column card-feedback"
           >
             <div class="card-body">
               <h5 class="card-title text-danger font-weight-bold">{{ feedback.userID.fullName }}</h5>
@@ -67,5 +67,8 @@ onMounted(() => {
     background-color: var(--primary-red);
     color: var(--primary-white);
     border: 1px solid var(--primary-red);
+}
+.card-feedback{
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 </style>

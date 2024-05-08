@@ -67,6 +67,11 @@
                   >Sản phẩm</router-link
                 >
               </li>
+              <li v-if="isAdmin==true" class="nav-item mx-4">
+                <router-link :to="{name: 'AdminLayout'}" class="nav-link nav-bar-item px-0" title="Quản trị"
+                  >Quản trị</router-link
+                >
+              </li>
               
             </ul>
           </div>
@@ -103,6 +108,7 @@ const logOut = () => {
 };
 const fullName = ref(JSON.parse(localStorage.getItem('userInformation'))?.fullName);
 const userID = ref(localStorage.getItem('userID')? localStorage.getItem('userID') : null);
+const isAdmin = ref(JSON.parse(localStorage.getItem('userInformation'))?.isAdmin);
 onMounted(() => {
   cartStore.getData();
   cartStore.getItemCart();

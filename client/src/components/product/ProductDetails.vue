@@ -85,30 +85,9 @@
               <hr />
 
               <div class="row mb-4">
-                <!-- <div class="col-md-4 col-6">
-                  <label class="mb-2">Color</label>
-                  <select
-                    class="form-select border border-secondary"
-                    style="height: 40px" 
-                    v-model="select"
-                  >
-                    <option :value="thumb.color"  @click="onClick(thumb.color)" v-for="thumb in thumbnail" :key="thumb._id">{{ thumb.color }}</option>
-                  </select>
-                </div> -->
-                <!-- col.// -->
-                <!-- <div class="col-md-4 col-6 mb-3">
-                  <label class="mb-2 d-block">Quantity</label>
-                  <div class="input-group mb-3" style="width: 170px"></div>
-                </div> -->
               </div>
               <div class="row">
                 <div class="col-12 d-flex flex-row">
-                  <!-- <div
-                    href="#"
-                    class="btn btn-warning shadow-0 w-100 me-1 d-flex text-white align-items-center justify-content-center"
-                  >
-                    Mua ngay
-                  </div> -->
                   <div
                   @click="addToCart()"
                     v-if="!ItemIsInCart && !showSuccess"
@@ -116,12 +95,6 @@
                   >
                     <i class=" me-1 fa fa-shopping-basket"></i> Thêm vào giỏ hàng 
                   </div>  
-                  <!-- <div
-                    v-if="showSuccess && !ItemIsInCart"
-                    class="btn-add-cart-success btn btn-primary shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
-                  >
-                    <i class=" me-1 fa fa-shopping-basket"></i> Đã thêm sản phẩm vào giỏ hàng!
-                  </div> -->
                   <div
                     v-if="ItemIsInCart"
                     class="btn btn-cart-is-in-cart shadow-0 w-100 ms-1 d-flex align-items-center justify-content-center text-white"
@@ -179,6 +152,7 @@ export default {
     const showSuccess = ref(false)
     const addToCart = async () => {
     if(userID.value === null) return alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+    if(product.value.number === 0) return alert("Sản phẩm đã hết hàng");
     axios.post(`http://localhost:8081/api/cartitem/user/${userID.value}`,{
       productID: product.value._id,
       price: product.value.new_price,

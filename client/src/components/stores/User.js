@@ -34,7 +34,7 @@ export const useUserStore = defineStore("user", {
             localStorage.setItem("userRegister", JSON.stringify(data.data));
             Toast.fire({
             icon: "success",
-            title: "Đăng nhập thành công!",
+            title: "Đăng ký thành công!",
           });
           })
           .catch((error) => {

@@ -11,7 +11,6 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 import "./assets/styles/index.css"
 import "bootstrap/dist/js/bootstrap.min.js"
 import Swal from "sweetalert2";
-
 window.Swal = Swal;
 const Toast = Swal.mixin({
   toast: true,
@@ -28,11 +27,13 @@ const Toast = Swal.mixin({
 window.Toast = Toast;
 // import router
 import router from "./router/index"
-const pinia = createPinia()
 const app = createApp(App);
-app.use(pinia);
+const pinia = createPinia()
 app.use(router);
 app.use(PrimeVue);
+app.use(pinia);
+
+
 app.config.globalProperties.$formatDate = function(date) {
   if (!date) return '';
   return format(new Date(date), 'dd/MM/yyyy HH:mm');

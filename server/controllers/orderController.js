@@ -20,25 +20,57 @@ const addOrder = async (req, res) => {
 }
 
 // GET ORDER APPROVED 
+const page_size_order_approved = 10;
 const getOrderApproved = async (req, res) => {
-    const orders = await OrderModel.find({order_status: 1})
-    .populate("userID")
-    console.log(orders)
-    if(orders.length > 0){
-        res.status(200).json(orders)
+    var page = req.query.page;
+    if(page){
+        page = parseInt(page);
+        if(page <= 0) page = 1;
+        var elementsPass = (page -1)*page_size_order_approved;
+        await OrderModel.find({order_status: 1}).skip(elementsPass).limit(page_size_order_approved).sort({createdAt: -1})
+        .populate('userID')
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
     } else {
-        res.status(404).json("Không có đơn hàng nào đã được xử lý")
+         await OrderModel.find({order_status: 1})
+        .populate('userID')
+        .sort({createdAt: -1})
+        .then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
+            res.status(500).json(error)
+        })
     }
 }
 
 // GET ORDER PENDING
 const getOrderPending= async (req, res) => {
-    const orders = await OrderModel.find({order_status: 0})
-    .populate("userID")
-    if(orders.length > 0){
-        res.status(200).json(orders)
+    var page = req.query.page;
+    if(page){
+        page = parseInt(page);
+        if(page <= 0) page = 1;
+        var elementsPass = (page -1)*page_size_order_approved;
+        await OrderModel.find({order_status: 0}).skip(elementsPass).limit(page_size_order_approved).sort({createdAt: -1})
+        .populate('userID')
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
     } else {
-        res.status(404).json("Không có đơn hàng nào cần xử lý")
+         await OrderModel.find({order_status: 0})
+        .populate('userID')
+        .sort({createdAt: -1})
+        .then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
+            res.status(500).json(error)
+        })
     }
 }
 
@@ -84,8 +116,6 @@ const updateOrderStatus = async (req, res) => {
 
 const getOrder = async (req, res) => {
     const userID = req.params.userID;
-    // const orders = await OrderModel.find({userID: userID}).sort({order_date: -1}).limit(1)
-    // .populate("userID")
     await OrderModel.find({userID: userID})
     .then(data => {
         res.status(200).json(data)

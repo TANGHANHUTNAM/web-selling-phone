@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 require("./services/DB");
-// const multer = require("multer")
+const multer = require("multer")
 const cors = require("cors")
 app.use(cors());
 
@@ -12,6 +12,27 @@ const path = require("path");
 app.use("/images",express.static(path.join(__dirname,'./public/images/products')));
 app.use(express.json())
 
+const storage = multer.diskStorage({
+  destination: './public/images/product',
+  filename: function(req, file, cb){
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 }, // Limit file size to 1MB
+}).single('image');
+
+app.post('/upload', (req, res) => {
+  upload(req, res, (err) => {
+    if(err){
+      res.send('An error occurred while uploading the image');
+    } else {
+      res.send('Image uploaded successfully');
+    }
+  });
+});
 
 const userRoutes = require("./routes/userRoutes");
 app.use("/api/user", userRoutes);

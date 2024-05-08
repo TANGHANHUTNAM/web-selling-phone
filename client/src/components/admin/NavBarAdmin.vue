@@ -6,7 +6,7 @@
       data-navbar-soft-on-scroll="data-navbar-soft-on-scroll"
     >
       <div class="container">
-        <router-link :to="{name: 'AdminLayout'}" class="navbar-brand me-lg-auto cursor-pointer nav-logo">
+        <router-link :to="{name: 'Home'}" class="navbar-brand me-lg-auto cursor-pointer nav-logo">
           <img
             class="w-100 w-md-100 img-fluid logo-img"
             src="../../assets/images/logo.png"

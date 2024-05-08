@@ -77,6 +77,7 @@ const getAllFeedbacksApproved = async (req, res) => {
         })
     } else {
         await FeedBackModel.find({approved: 1})
+        .sort({created: -1})
         .populate('userID')
         .then(data => {
             res.status(200).json(data)
@@ -86,6 +87,44 @@ const getAllFeedbacksApproved = async (req, res) => {
     }
 }
 
+const getAllFeedbacksPending = async (req, res) => {
+    var page = req.query.page;
+    if(page){
+        page = parseInt(page);
+        if(page <= 0) page = 1;
+        var elementsPass = (page -1)*PAGE_SIZE_APPROVED; // 4 phan tu tren 1 trang
+
+        await FeedBackModel.find({approved: 0}).skip(elementsPass).limit(PAGE_SIZE_APPROVED).sort({createdAt: -1})
+        .populate('userID')
+        .then(data => {
+            res.json(data)
+        })
+        .catch(error => {
+            res.status(500).json(error)
+        })
+    } else {
+        await FeedBackModel.find({approved: 0})
+        .sort({created: -1})
+        .populate('userID')
+        .then(data => {
+            res.status(200).json(data)
+        }).catch(error => {
+            res.status(500).json(error)
+        })
+    }
+}
+
+const updateFeedbackStatus = async (req, res) => {
+    const feedbackID = req.params.feedbackID;
+    const approved = req.body.approved;
+    await FeedBackModel.updateOne({_id: feedbackID}, {approved: approved})
+    .then(data => {
+        res.status(200).json({message: "Cập nhật trạng thái phản hồi thành công!", data})
+    }).catch(error => {
+        res.status(500).json(error)
+    })
+}
+
 module.exports = {
-    getFeedbacks, getAllFeedbacks, addFeedback,getAllFeedbacksApproved
+   updateFeedbackStatus, getAllFeedbacksPending,  getFeedbacks, getAllFeedbacks, addFeedback,getAllFeedbacksApproved
 }

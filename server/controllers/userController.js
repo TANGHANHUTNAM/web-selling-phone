@@ -22,6 +22,7 @@ const getAllUsers = async (req, res) => {
         var elementsPass = (page -1)*PAGE_SIZE; // 10 phan tu tren 1 trang
 
         await UserModel.find({}).skip(elementsPass).limit(PAGE_SIZE)
+        .sort({createdAt: -1})
         .then(data => {
             res.json(data)
         })
@@ -29,7 +30,9 @@ const getAllUsers = async (req, res) => {
             res.status(500).json(error)
         })
     } else {
-        await UserModel.find({}).then(data => {
+        await UserModel.find({})
+        .sort({createdAt: -1})
+        .then(data => {
             res.status(200).json(data)
         }).catch(error => {
             res.status(500).json(error)

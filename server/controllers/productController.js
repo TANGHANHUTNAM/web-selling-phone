@@ -22,7 +22,7 @@ const getAllProduct = async (req, res) => {
         if(page <= 0) page = 1;
         var elementsPass = (page -1)*PAGE_SIZE; // 20 phan tu tren 1 trang
 
-        await ProductModel.find({}).skip(elementsPass).limit(PAGE_SIZE)
+        await ProductModel.find({}).skip(elementsPass).limit(PAGE_SIZE).sort({createdAt: -1})
         .then(data => {
             res.status(200).json(data)
         })
@@ -37,7 +37,9 @@ const getAllProduct = async (req, res) => {
             res.status(500).json(error)
         })
     } else {
-        await ProductModel.find({}).then(data => {
+        await ProductModel.find({})
+        .sort({createdAt: -1})
+        .then(data => {
             res.status(200).json(data)
         }).catch(error => {
             res.status(500).json(error)
@@ -73,7 +75,7 @@ const getProductByBrand = async (req, res) => {
 
 // 
 const addNewProduct = async (req, res) => {
-    const {title, des, color, brand, number, thumbnail, new_price, rom} = req.body;
+    const {title, des, color, brand, number, thumbnail, new_price, rom, ram} = req.body;
     const product = new ProductModel({
         title: title,
         des: des,
@@ -83,6 +85,7 @@ const addNewProduct = async (req, res) => {
         thumbnail: thumbnail,
         new_price: new_price,
         rom: rom,
+        ram: ram,
     })
     await product.save()
     .then(data => {

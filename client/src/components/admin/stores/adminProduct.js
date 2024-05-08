@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import Toast from "sweetalert2";
 export const useAdminProductStore = defineStore('admin-product', {
   state: () => ({
     out_of_stock_products: [],
@@ -9,6 +10,8 @@ export const useAdminProductStore = defineStore('admin-product', {
     productNew: [],
     allProduct: [],
     pageAllProduct: 1,
+    createProduct: [],
+    brand: [],
   }),
   getters: {
     
@@ -43,9 +46,35 @@ export const useAdminProductStore = defineStore('admin-product', {
         
     },
 
+    async getBrand() {
+      const data = await axios.get(`http://localhost:8081/api/brand`);
+      this.brand = data.data;
+    },
+
     async getAllProduct() {
         const data = await axios.get(`http://localhost:8081/api/product?page=${this.pageAllProduct}`);
         this.allProduct = data.data;
+    },
+
+    async addNewProduct () {
+      await axios.post(`http://localhost:8081/api/product`,{
+        title: this.createProduct.title,
+        number: Number(this.createProduct.number),
+        ram: this.createProduct.ram,
+        rom: this.createProduct.rom,
+        new_price: this.createProduct.new_price,
+        des: this.createProduct.des,
+        thumbnail: this.createProduct.thumbnail,
+        brand: this.createProduct.selectBrand,
+        color: this.createProduct.color,
+      }).then(() => {
+        Toast.fire({
+            icon: "success",
+            title: "Thêm sản phẩm thành công!",
+          });
+      }).catch((error) => {
+        console.log(error);
+      });
     },
 
     nextPage() {
